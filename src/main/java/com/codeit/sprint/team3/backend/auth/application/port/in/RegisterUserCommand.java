@@ -11,6 +11,7 @@ public class RegisterUserCommand extends SelfValidating<RegisterUserCommand> {
     private final String name;
 
     @Email
+    @NotBlank
     private final String email;
 
     @NotBlank
