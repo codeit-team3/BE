@@ -4,14 +4,15 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +44,10 @@ public class BookClubController {
         if (image.isEmpty()) {
             return;
         }
-        //TODO 이미지 형식 제한
+        //TODO 이미지 형식 제한 추가하기~
+        if (!"jpg".equals(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
+            throw new InvalidRequest("image", "이미지는 jpg 형식이어야 합니다.");
+        }
         long size = image.getSize();
         if (size > 1024 * 1024 * 10) {
             throw new InvalidRequest("image", "이미지 크기는 10MB 이하여야 합니다.");
