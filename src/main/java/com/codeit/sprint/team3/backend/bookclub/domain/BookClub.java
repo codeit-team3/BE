@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,9 +18,10 @@ public class BookClub {
     private final int memberLimit;
     private final String city;
     private final String town;
+    private final Long createdBy;
 
-    @Builder
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    @Builder(access = AccessLevel.PRIVATE)
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -30,6 +32,7 @@ public class BookClub {
         this.memberLimit = memberLimit;
         this.city = city;
         this.town = town;
+        this.createdBy = createdBy;
     }
 
     public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
@@ -46,7 +49,7 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -58,6 +61,7 @@ public class BookClub {
                 .memberLimit(memberLimit)
                 .city(city)
                 .town(town)
+                .createdBy(createdBy)
                 .build();
     }
 }

@@ -29,6 +29,7 @@ public class BookClubEntity {
     private int memberLimit;
     private String city;
     private String town;
+    private Long createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -46,6 +47,7 @@ public class BookClubEntity {
             int memberLimit,
             String city,
             String town,
+            Long createdBy,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
@@ -58,6 +60,7 @@ public class BookClubEntity {
         this.memberLimit = memberLimit;
         this.city = city;
         this.town = town;
+        this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -73,12 +76,13 @@ public class BookClubEntity {
                 .memberLimit(bookClub.getMemberLimit())
                 .city(bookClub.getCity())
                 .town(bookClub.getTown())
+                .createdBy(bookClub.getCreatedBy())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, city, town);
+        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, city, town, createdBy);
     }
 }
