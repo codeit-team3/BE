@@ -7,7 +7,7 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBook
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

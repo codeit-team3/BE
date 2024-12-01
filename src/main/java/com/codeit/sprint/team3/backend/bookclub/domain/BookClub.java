@@ -1,7 +1,5 @@
-package com.codeit.sprint.team3.backend.bookclub.domain.model;
+package com.codeit.sprint.team3.backend.bookclub.domain;
 
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
-import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import lombok.Builder;
 import lombok.Getter;
 

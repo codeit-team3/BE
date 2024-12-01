@@ -6,7 +6,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClub
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

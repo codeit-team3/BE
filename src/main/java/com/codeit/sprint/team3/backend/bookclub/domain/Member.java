@@ -1,4 +1,4 @@
-package com.codeit.sprint.team3.backend.bookclub.domain.model;
+package com.codeit.sprint.team3.backend.bookclub.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

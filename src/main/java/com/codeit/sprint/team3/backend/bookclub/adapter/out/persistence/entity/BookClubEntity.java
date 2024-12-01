@@ -2,7 +2,7 @@ package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

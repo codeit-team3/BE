@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response;
 
-import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 
 import java.util.List;
 

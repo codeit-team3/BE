@@ -2,7 +2,7 @@ package com.codeit.sprint.team3.backend.bookclub.application.port.in;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 
 import java.time.LocalDate;
 import java.util.List;
