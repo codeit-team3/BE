@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -15,6 +16,8 @@ public class BookClubMemberEntity {
     private Long id;
     private Long bookClubId;
     private Long userId;
+    @ColumnDefault("false")
+    private boolean isInactive;
 
     protected BookClubMemberEntity() {
     }

@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubEntity;
+import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubDto;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubEntityRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubQueryRepository;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
@@ -32,7 +33,7 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
         //TODO: 찜 구현 후 찜 추가하기
         return bookClubQueryRepository.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate)
                 .stream()
-                .map(BookClubEntity::toModel)
+                .map(BookClubDto::toModel)
                 .toList();
     }
 

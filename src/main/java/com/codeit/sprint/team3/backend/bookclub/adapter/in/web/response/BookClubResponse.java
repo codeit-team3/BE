@@ -14,7 +14,8 @@ public record BookClubResponse(
         String endDate,
         int memberLimit,
         String city,
-        String town
+        String town,
+        int memberCount
 ) {
     public static BookClubResponse from(BookClub bookClub) {
         return new BookClubResponse(
@@ -27,7 +28,8 @@ public record BookClubResponse(
                 bookClub.getEndDate().toString(),
                 bookClub.getMemberLimit(),
                 bookClub.getCity(),
-                bookClub.getTown()
+                bookClub.getTown(),
+                bookClub.getMemberCount()
         );
     }
 }

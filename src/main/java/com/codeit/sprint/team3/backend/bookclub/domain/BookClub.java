@@ -19,9 +19,10 @@ public class BookClub {
     private final String city;
     private final String town;
     private final Long createdBy;
+    private final int memberCount;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,6 +34,7 @@ public class BookClub {
         this.city = city;
         this.town = town;
         this.createdBy = createdBy;
+        this.memberCount = memberCount;
     }
 
     public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
@@ -62,6 +64,23 @@ public class BookClub {
                 .city(city)
                 .town(town)
                 .createdBy(createdBy)
+                .build();
+    }
+
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
+        return BookClub.builder()
+                .id(id)
+                .title(title)
+                .description(description)
+                .meetingType(meetingType)
+                .bookClubType(bookClubType)
+                .targetDate(targetDate)
+                .endDate(endDate)
+                .memberLimit(memberLimit)
+                .city(city)
+                .town(town)
+                .createdBy(createdBy)
+                .memberCount(memberCount)
                 .build();
     }
 }
