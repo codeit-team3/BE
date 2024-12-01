@@ -27,7 +27,8 @@ public class BookClubLikeService implements BookClubLikeUseCase {
         bookClubLikePort.deleteBookClubLike(BookClubLike.of(bookClub.getId(), userId));
     }
 
-    private BookClub getBookClubById(Long bookClubId) {
+    @Override
+    public BookClub getBookClubById(Long bookClubId) {
         return queryBookClubPort.getById(bookClubId)
                 .orElseThrow(BookClubNotExistException::new);
     }

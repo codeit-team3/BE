@@ -15,4 +15,20 @@ public class JpaBookClubMemberAdapter implements CommandBookClubMemberPort {
     public void save(BookClubMemberEntity bookClubMemberEntity) {
         bookClubMemberEntityRepository.save(bookClubMemberEntity);
     }
+
+    @Override
+    public boolean existsByBookClubIdAndUserId(Long bookClubId, Long userId) {
+        return bookClubMemberEntityRepository.existsByBookClubIdAndUserIdAndIsInactiveFalse(bookClubId, userId);
+    }
+
+    @Override
+    public void joinBookClub(Long bookClubId, Long userId) {
+        bookClubMemberEntityRepository.save(BookClubMemberEntity.of(bookClubId, userId));
+    }
+
+    @Override
+    public void leaveBookClub(Long bookClubId, Long userId) {
+        BookClubMemberEntity bookClubMemberEntity = bookClubMemberEntityRepository.findByBookClubIdAndUserId(bookClubId, userId);
+        bookClubMemberEntity.inactivate();
+    }
 }

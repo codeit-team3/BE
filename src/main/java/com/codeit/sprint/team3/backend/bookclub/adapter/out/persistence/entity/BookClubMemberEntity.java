@@ -30,4 +30,12 @@ public class BookClubMemberEntity {
     public static BookClubMemberEntity from(Member member) {
         return new BookClubMemberEntity(member.getBookClubId(), member.getUserId());
     }
+
+    public static BookClubMemberEntity of(Long bookClubId, Long userId) {
+        return new BookClubMemberEntity(bookClubId, userId);
+    }
+
+    public void inactivate() {
+        isInactive = true;
+    }
 }
