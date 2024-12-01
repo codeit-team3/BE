@@ -34,6 +34,8 @@ public class BookClubMemberService implements BookClubMemberUseCase {
         //BookClub에 가입
         //TODO 동시성 문제가 생길 수 있으므로 Lock 필요. 어떻게 구현할것인가?
         commandBookClubMemberPort.joinBookClub(bookClubId, userId);
+        //TODO 채팅방에 멤버 추가
+        //TODO 알림
     }
 
     @Override
@@ -47,7 +49,9 @@ public class BookClubMemberService implements BookClubMemberUseCase {
         /**
          * TODO
          * 1. 남은 유저가 없다면 BookClub 삭제
-         * 2. 남은 유저가 없다면 채팅방 삭제
+         * 2. 채팅방에서 멤버 제거
+         * 3. 알림
+         * 4. 남은 유저가 없다면 채팅방 삭제 및 북클럽 삭제
          */
     }
 }
