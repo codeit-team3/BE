@@ -16,9 +16,11 @@ public record CreateBookClubRequest(
         @NotBlank(message = "마감 날짜는 필수입니다.")
         LocalDate endDate,
         @NotBlank(message = "모집 정원은 필수입니다.")
-        int memberLimit
+        int memberLimit,
+        String city,
+        String town
 ) {
     public BookClub toDomain() {
-        return BookClub.of(title, BookClubType.from(bookClubType), targetDate, endDate, memberLimit);
+        return BookClub.of(title, BookClubType.from(bookClubType), targetDate, endDate, memberLimit, city, town);
     }
 }

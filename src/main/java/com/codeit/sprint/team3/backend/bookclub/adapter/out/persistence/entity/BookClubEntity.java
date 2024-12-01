@@ -24,6 +24,8 @@ public class BookClubEntity {
     private LocalDate targetDate;
     private LocalDate endDate;
     private int memberLimit;
+    private String city;
+    private String town;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -37,6 +39,8 @@ public class BookClubEntity {
             LocalDate targetDate,
             LocalDate endDate,
             int memberLimit,
+            String city,
+            String town,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
@@ -45,6 +49,8 @@ public class BookClubEntity {
         this.targetDate = targetDate;
         this.endDate = endDate;
         this.memberLimit = memberLimit;
+        this.city = city;
+        this.town = town;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -56,12 +62,14 @@ public class BookClubEntity {
                 .targetDate(bookClub.getTargetDate())
                 .endDate(bookClub.getEndDate())
                 .memberLimit(bookClub.getMemberLimit())
+                .city(bookClub.getCity())
+                .town(bookClub.getTown())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, title, bookClubType, targetDate, endDate, memberLimit);
+        return BookClub.of(id, title, bookClubType, targetDate, endDate, memberLimit, city, town);
     }
 }

@@ -22,7 +22,7 @@ public class BookClubController {
     @SneakyThrows
     @RequestMapping
     public ResponseEntity<Void> createBookClub(
-            @RequestPart MultipartFile image,
+            @RequestPart(required = false) MultipartFile image,
             @RequestPart(name = "data") @Valid CreateBookClubRequest createBookClubRequest
     ) {
         validateImage(image);
@@ -34,7 +34,7 @@ public class BookClubController {
 
     private void validateImage(MultipartFile image) {
         if (image.isEmpty()) {
-            throw new InvalidRequest("image", "이미지는 필수입니다.");
+            return;
         }
         //TODO 이미지 형식 제한
         long size = image.getSize();
