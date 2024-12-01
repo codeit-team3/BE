@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.domain.model;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
+import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +11,8 @@ import java.time.LocalDate;
 public class BookClub {
     private final Long id;
     private final String title;
+    private final String description;
+    private final MeetingType meetingType;
     private final BookClubType bookClubType;
     private final LocalDate targetDate;
     private final LocalDate endDate;
@@ -18,9 +21,11 @@ public class BookClub {
     private final String town;
 
     @Builder
-    private BookClub(Long id,String title, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
         this.id = id;
         this.title = title;
+        this.description = description;
+        this.meetingType = meetingType;
         this.bookClubType = bookClubType;
         this.targetDate = targetDate;
         this.endDate = endDate;
@@ -29,9 +34,11 @@ public class BookClub {
         this.town = town;
     }
 
-    public static BookClub of(String title, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
         return BookClub.builder()
                 .title(title)
+                .description(description)
+                .meetingType(meetingType)
                 .bookClubType(bookClubType)
                 .targetDate(targetDate)
                 .endDate(endDate)
@@ -41,10 +48,12 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
+                .description(description)
+                .meetingType(meetingType)
                 .bookClubType(bookClubType)
                 .targetDate(targetDate)
                 .endDate(endDate)

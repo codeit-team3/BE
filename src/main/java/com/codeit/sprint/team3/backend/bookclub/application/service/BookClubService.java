@@ -3,15 +3,22 @@ package com.codeit.sprint.team3.backend.bookclub.application.service;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
+import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
+import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
+    private final QueryBookClubPort queryBookClubPort;
     private final BookClubMemberUseCase bookClubMemberUseCase;
 
     @Override
@@ -31,5 +38,10 @@ public class BookClubService implements BookClubUseCase {
          * 채팅방에 멤버 추가(북클럽 생성자)
          * 알림
          */
+    }
+
+    @Override
+    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate) {
+        return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate);
     }
 }

@@ -1,23 +1,23 @@
 package com.codeit.sprint.team3.backend.bookclub.domain;
 
-public enum BookClubType {
-    FREE,
-    FIXED,
+public enum MeetingType {
+    ONLINE,
+    OFFLINE,
     ALL
     ;
 
-    public static BookClubType getCommandType(String type) {
+    public static MeetingType getCommandType(String type) {
         return switch (type.toUpperCase()) {
-            case "FREE" -> FREE;
-            case "FIXED" -> FIXED;
+            case "ONLINE" -> ONLINE;
+            case "OFFLINE" -> OFFLINE;
             default -> throw new IllegalArgumentException("변환할 수 없는 타입입니다.: " + type);
         };
     }
 
-    public static BookClubType getQueryType(String type) {
+    public static MeetingType getQueryType(String type) {
         return switch (type.toUpperCase()) {
-            case "FREE" -> FREE;
-            case "FIXED" -> FIXED;
+            case "ONLINE" -> ONLINE;
+            case "OFFLINE" -> OFFLINE;
             case "ALL" -> ALL;
             default -> throw new IllegalArgumentException("변환할 수 없는 타입입니다.: " + type);
         };

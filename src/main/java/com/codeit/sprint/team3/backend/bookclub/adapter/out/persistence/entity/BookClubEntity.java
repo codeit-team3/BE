@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
+import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.codeit.sprint.team3.backend.bookclub.domain.model.BookClub;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,8 @@ public class BookClubEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String description;
+    private MeetingType meetingType;
     private BookClubType bookClubType;
     private LocalDate targetDate;
     private LocalDate endDate;
@@ -35,6 +38,8 @@ public class BookClubEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private BookClubEntity(
             String title,
+            String description,
+            MeetingType meetingType,
             BookClubType bookClubType,
             LocalDate targetDate,
             LocalDate endDate,
@@ -45,6 +50,8 @@ public class BookClubEntity {
             LocalDateTime updatedAt
     ) {
         this.title = title;
+        this.description = description;
+        this.meetingType = meetingType;
         this.bookClubType = bookClubType;
         this.targetDate = targetDate;
         this.endDate = endDate;
@@ -58,6 +65,8 @@ public class BookClubEntity {
     public static BookClubEntity from(BookClub bookClub) {
         return BookClubEntity.builder()
                 .title(bookClub.getTitle())
+                .description(bookClub.getDescription())
+                .meetingType(bookClub.getMeetingType())
                 .bookClubType(bookClub.getBookClubType())
                 .targetDate(bookClub.getTargetDate())
                 .endDate(bookClub.getEndDate())
@@ -70,6 +79,6 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, title, bookClubType, targetDate, endDate, memberLimit, city, town);
+        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, city, town);
     }
 }

@@ -16,6 +16,12 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+  h2:
+    console:
+      enabled: true
+
 logging:
   level:
-    org.hibernate.type: info
+    org.springframework.web.client: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.orm.jdbc.bind: trace
