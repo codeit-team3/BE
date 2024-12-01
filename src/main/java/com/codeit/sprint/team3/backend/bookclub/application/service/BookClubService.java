@@ -29,8 +29,8 @@ public class BookClubService implements BookClubUseCase {
         //book club creation logic
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub);
 
-        Member member = Member.of(savedBookClub.getId(), userId);
-        bookClubMemberUseCase.saveMember(member);
+        //save the creator as a member
+        bookClubMemberUseCase.saveMember(Member.of(savedBookClub.getId(), userId));
 
         /**
          * TODO 채팅 구현되면 아래 로직 추가하기
