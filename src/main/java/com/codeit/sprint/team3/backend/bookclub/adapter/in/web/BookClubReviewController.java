@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/book-clubs/reviews")
+@RequestMapping("/api/v1/book-clubs/{bookClubId}/reviews")
 @RequiredArgsConstructor
 public class BookClubReviewController {
     private final BookClubReviewUseCase bookClubReviewUseCase;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Void> reviewBookClub(
-            @PathVariable Long id,
+    @PostMapping
+    public ResponseEntity<Void> createBookClubReview(
+            @PathVariable Long bookClubId,
             @Valid @Max(10) @PositiveOrZero Integer rating,
             @Valid @NotBlank String content
     ) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;
-        bookClubReviewUseCase.saveBookClubReview(id, userId, rating, content);
+        bookClubReviewUseCase.saveBookClubReview(bookClubId, userId, rating, content);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }

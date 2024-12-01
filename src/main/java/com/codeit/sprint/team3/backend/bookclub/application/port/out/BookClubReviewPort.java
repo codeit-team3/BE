@@ -1,5 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.application.port.out;
 
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+
 public interface BookClubReviewPort {
-    void saveBookClubReview(Long bookClubId, Long userId, Integer rating, String content);
+    void saveBookClubReview(BookClubReview bookClubReview);
 }
