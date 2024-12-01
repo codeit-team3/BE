@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/book-club")
+@RequestMapping("/api/v1/book-clubs")
 @RequiredArgsConstructor
 public class BookClubController {
     private final BookClubUseCase bookClubUseCase;
@@ -32,7 +32,9 @@ public class BookClubController {
     ) {
         validateImage(image);
         //TODO 이미지 저장
-        bookClubUseCase.createBookClub(createBookClubRequest.toDomain());
+        //TODO 유저 security context에서 아이디 가져오기
+        Long userId = 1L;
+        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }

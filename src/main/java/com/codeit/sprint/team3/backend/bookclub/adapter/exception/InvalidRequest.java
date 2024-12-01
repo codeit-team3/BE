@@ -9,10 +9,6 @@ public class InvalidRequest extends BookClubException {
     public String fieldName;
     public String message;
 
-    public InvalidRequest() {
-        super(MESSAGE);
-    }
-
     public InvalidRequest(String fieldName, String message) {
         super(MESSAGE);
         addValidation(fieldName, message);

@@ -22,12 +22,9 @@ public class BookClubService implements BookClubUseCase {
     private final BookClubMemberUseCase bookClubMemberUseCase;
 
     @Override
-    public void createBookClub(BookClub bookClub) {
-        //TODO 유저 security context에서 아이디 가져오기
-        Long userId = 1L;
-
+    public void createBookClub(BookClub bookClub, Long userId) {
         //book club creation logic
-        BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub);
+        BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
 
         //save the creator as a member
         bookClubMemberUseCase.saveMember(Member.of(savedBookClub.getId(), userId));

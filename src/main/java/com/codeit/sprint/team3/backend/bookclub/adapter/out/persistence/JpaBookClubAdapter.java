@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
     private final BookClubQueryRepository bookClubQueryRepository;
 
     @Override
-    public BookClub saveBookClub(BookClub bookClub) {
-        return bookClubEntityRepository.save(BookClubEntity.from(bookClub))
+    public BookClub saveBookClub(BookClub bookClub, Long userId) {
+        return bookClubEntityRepository.save(BookClubEntity.of(bookClub, userId))
                 .toModel();
     }
 
@@ -33,5 +34,11 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
                 .stream()
                 .map(BookClubEntity::toModel)
                 .toList();
+    }
+
+    @Override
+    public Optional<BookClub> getById(Long bookClubId) {
+        return bookClubEntityRepository.findById(bookClubId)
+                .map(BookClubEntity::toModel);
     }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookClubUseCase {
-    void createBookClub(BookClub bookClub);
+    void createBookClub(BookClub bookClub, Long userId);
 
     List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate);
 }

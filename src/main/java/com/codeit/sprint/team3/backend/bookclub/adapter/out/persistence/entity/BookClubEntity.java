@@ -65,7 +65,7 @@ public class BookClubEntity {
         this.updatedAt = updatedAt;
     }
 
-    public static BookClubEntity from(BookClub bookClub) {
+    public static BookClubEntity of(BookClub bookClub, Long userId) {
         return BookClubEntity.builder()
                 .title(bookClub.getTitle())
                 .description(bookClub.getDescription())
@@ -76,7 +76,7 @@ public class BookClubEntity {
                 .memberLimit(bookClub.getMemberLimit())
                 .city(bookClub.getCity())
                 .town(bookClub.getTown())
-                .createdBy(bookClub.getCreatedBy())
+                .createdBy(userId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
