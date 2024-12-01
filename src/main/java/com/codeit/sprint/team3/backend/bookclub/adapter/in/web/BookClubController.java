@@ -55,7 +55,7 @@ public class BookClubController {
             @RequestParam(defaultValue = "ALL") String bookClubType,
             @RequestParam(defaultValue = "ALL") String meetingType,
             Integer memberLimit,
-            String location,
+            String location, //동 단위 town
             LocalDate targetDate
     ) {
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate);

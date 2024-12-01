@@ -25,7 +25,7 @@ public class BookClubQueryRepository {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
-            builder.and(bookClubEntity.city.eq(location));
+            builder.and(bookClubEntity.town.eq(location));
         }
         if (memberLimit != null) {
             builder.and(bookClubEntity.memberLimit.eq(memberLimit));
