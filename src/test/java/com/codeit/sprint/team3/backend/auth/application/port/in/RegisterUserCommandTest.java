@@ -89,7 +89,7 @@ class RegisterUserCommandTest {
         assertEquals(command.getName(), name);
         assertEquals(command.getEmail(), email);
         assertEquals(command.getPassword(), password);
-        assertEquals(command.getNickName(), nickname);
+        assertEquals(command.getNickname(), nickname);
         assertEquals(command.getDescription(), description);
     }
 

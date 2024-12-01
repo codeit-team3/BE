@@ -18,7 +18,7 @@ public class RegisterUserCommand extends SelfValidating<RegisterUserCommand> {
     private final String password;
 
     @NotBlank
-    private final String nickName;
+    private final String nickname;
 
     private final String description;
 
@@ -26,12 +26,12 @@ public class RegisterUserCommand extends SelfValidating<RegisterUserCommand> {
             String name,
             String email,
             String password,
-            String nickName,
+            String nickname,
             String description) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.description = description;
 
         validateSelf(); // 검증 로직 수행

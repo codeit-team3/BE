@@ -35,4 +35,14 @@ public class AuthExceptionHandler {
         );
     }
 
+    @ExceptionHandler(LoginFailedException.class)
+    public ResponseEntity<Map<String, String>> handleLoginFailedException(LoginFailedException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                Map.of(
+                        "code", "INVALID_CREDENTIALS",
+                        "message", "잘못된 이메일 또는 비밀번호입니다"
+                )
+        );
+    }
+
 }
