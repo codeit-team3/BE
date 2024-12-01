@@ -2,7 +2,7 @@ package com.codeit.sprint.team3.backend.bookclub.application.service;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubMemberAlreadyExistsException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubMemberEntity;
-import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubLikeUseCase;
+import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubMemberPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookClubMemberService implements BookClubMemberUseCase {
     private final CommandBookClubMemberPort commandBookClubMemberPort;
-    private final BookClubLikeUseCase bookClubLikeUseCase;
+    private final BookClubUseCase bookClubUseCase;
 
     @Override
     public void saveMember(Member member) {
@@ -26,7 +26,7 @@ public class BookClubMemberService implements BookClubMemberUseCase {
     @Transactional
     public void joinBookClub(Long bookClubId, Long userId) {
         //존재하는 BookClub인지 확인
-        BookClub bookClub = bookClubLikeUseCase.getBookClubById(bookClubId);
+        BookClub bookClub = bookClubUseCase.getById(bookClubId);
         //이미 가입한 BookClub인지 확인
         if (commandBookClubMemberPort.existsByBookClubIdAndUserId(bookClubId, userId)) {
             throw new BookClubMemberAlreadyExistsException();
@@ -42,7 +42,7 @@ public class BookClubMemberService implements BookClubMemberUseCase {
     @Transactional
     public void leaveBookClub(Long bookClubId, Long userId) {
         //존재하는 BookClub인지 확인
-        BookClub bookClub = bookClubLikeUseCase.getBookClubById(bookClubId);
+        BookClub bookClub = bookClubUseCase.getById(bookClubId);
         //BookClub에서 탈퇴
         commandBookClubMemberPort.leaveBookClub(bookClub.getId(), userId);
 
