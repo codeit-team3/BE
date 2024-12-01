@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.application.service;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
@@ -40,5 +41,11 @@ public class BookClubService implements BookClubUseCase {
     @Override
     public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate) {
         return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate);
+    }
+
+    @Override
+    public BookClub getById(Long bookClubId) {
+        return queryBookClubPort.findById(bookClubId)
+                .orElseThrow(BookClubNotExistException::new);
     }
 }

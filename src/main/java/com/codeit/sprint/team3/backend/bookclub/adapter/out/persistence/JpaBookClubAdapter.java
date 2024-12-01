@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubEntity;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubDto;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubEntityRepository;
@@ -38,7 +39,7 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
     }
 
     @Override
-    public Optional<BookClub> getById(Long bookClubId) {
+    public Optional<BookClub> findById(Long bookClubId) {
         return bookClubEntityRepository.findById(bookClubId)
                 .map(BookClubEntity::toModel);
     }
