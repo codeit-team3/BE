@@ -29,4 +29,13 @@ public class BookClubReview {
                 .content(content)
                 .build();
     }
+
+    public static BookClubReview of(Long id, Long bookClubId, Long userId, Integer rating, String content) {
+        return BookClubReview.builder()
+                .userId(userId)
+                .bookClubId(bookClubId)
+                .rating(rating)
+                .content(content)
+                .build();
+    }
 }
