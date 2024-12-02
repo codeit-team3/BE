@@ -34,4 +34,8 @@ public class BookClubReviewEntity {
     public static BookClubReviewEntity from(BookClubReview bookClubReview) {
         return new BookClubReviewEntity(bookClubReview.getId(), bookClubReview.getUserId(), bookClubReview.getRating(), bookClubReview.getContent());
     }
+
+    public BookClubReview toDomain() {
+        return BookClubReview.of(id, bookClubId, userId, rating, content);
+    }
 }
