@@ -41,6 +41,6 @@ public class BookClubReviewController {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;
         List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 }
