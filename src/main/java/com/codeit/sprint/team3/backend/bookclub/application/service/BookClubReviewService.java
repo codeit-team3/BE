@@ -8,6 +8,8 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookClubReviewService implements BookClubReviewUseCase {
@@ -19,5 +21,12 @@ public class BookClubReviewService implements BookClubReviewUseCase {
         BookClub bookClub = bookClubUseCase.getById(bookClubId);
         BookClubReview bookClubReview = BookClubReview.of(bookClub.getId(), userId, rating, content);
         bookClubReviewPort.saveBookClubReview(bookClubReview);
+    }
+
+    @Override
+    public List<BookClubReview> getBookClubReviewsById(Long bookClubId) {
+        BookClub bookClub = bookClubUseCase.getById(bookClubId);
+        List<BookClubReview> bookClubReviews = bookClubReviewPort.findAllByBookClubId(bookClub.getId());
+        return List.of();
     }
 }

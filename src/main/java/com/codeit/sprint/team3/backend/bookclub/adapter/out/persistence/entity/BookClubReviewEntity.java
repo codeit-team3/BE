@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Getter
@@ -34,5 +33,9 @@ public class BookClubReviewEntity {
 
     public static BookClubReviewEntity from(BookClubReview bookClubReview) {
         return new BookClubReviewEntity(bookClubReview.getId(), bookClubReview.getUserId(), bookClubReview.getRating(), bookClubReview.getContent());
+    }
+
+    public BookClubReview toDomain() {
+        return BookClubReview.of(id, bookClubId, userId, rating, content);
     }
 }
