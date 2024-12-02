@@ -22,7 +22,10 @@ public class BookClubReviewController {
     @PostMapping
     public ResponseEntity<Void> createBookClubReview(
             @PathVariable Long bookClubId,
-            @Valid @Max(10) @PositiveOrZero Integer rating,
+            @Valid
+            @Max(message = "별점은 최대 10점 입니다.", value = 10)
+            @PositiveOrZero(message = "별점은 0점 이상이어야 합니다.")
+            Integer rating,
             @Valid @NotBlank String content
     ) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
