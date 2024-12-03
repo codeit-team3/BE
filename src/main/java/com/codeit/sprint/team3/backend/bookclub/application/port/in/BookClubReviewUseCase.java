@@ -8,4 +8,6 @@ public interface BookClubReviewUseCase {
     void saveBookClubReview(Long bookClubId, Long userId, Integer rating, String content);
 
     List<BookClubReview> getBookClubReviewsById(Long bookClubId);
+
+    void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId);
 }
