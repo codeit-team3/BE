@@ -8,4 +8,6 @@ public interface BookClubReviewPort {
     void saveBookClubReview(BookClubReview bookClubReview);
 
     List<BookClubReview> findAllByBookClubId(Long id);
+
+    void deleteBookClubReview(Long id, Long userId, Long bookClubReviewId);
 }

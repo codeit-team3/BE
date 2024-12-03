@@ -28,4 +28,11 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
                 .map(BookClubReviewEntity::toDomain)
                 .toList();
     }
+
+    @Override
+    public void deleteBookClubReview(Long id, Long userId, Long bookClubReviewId) {
+        BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndBookClubIdAndUserIdAndInactiveFalse(id, bookClubReviewId, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Book club review not found"));
+        bookClubReviewEntity.inactivate();
+    }
 }
