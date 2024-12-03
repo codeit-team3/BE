@@ -22,8 +22,8 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     }
 
     @Override
-    public List<BookClubReview> findAllByBookClubId(Long id) {
-        return bookClubReviewQueryRepository.findAllByBookClubId(id)
+    public List<BookClubReview> findAllByBookClubId(Long bookClubId) {
+        return bookClubReviewQueryRepository.findAllByBookClubId(bookClubId)
                 .stream()
                 .map(BookClubReviewEntity::toDomain)
                 .toList();

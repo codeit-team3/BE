@@ -26,7 +26,6 @@ public class BookClubReviewService implements BookClubReviewUseCase {
     @Override
     public List<BookClubReview> getBookClubReviewsById(Long bookClubId) {
         BookClub bookClub = bookClubUseCase.getById(bookClubId);
-        List<BookClubReview> bookClubReviews = bookClubReviewPort.findAllByBookClubId(bookClub.getId());
-        return List.of();
+        return bookClubReviewPort.findAllByBookClubId(bookClub.getId());
     }
 }
