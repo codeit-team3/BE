@@ -1,13 +1,14 @@
-package com.codeit.sprint.team3.backend.auth.adapter.in.web;
+package com.codeit.sprint.team3.backend.auth.application.port.in;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter
-public class LoginRequest {
-
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthenticationRequest {
     @Email(message = "유효한 이메일 주소를 입력하세요")
     @NotBlank(message = "이메일은 필수값입니다.")
     private String email;
