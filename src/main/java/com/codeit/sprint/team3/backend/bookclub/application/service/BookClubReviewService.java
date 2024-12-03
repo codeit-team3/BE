@@ -28,4 +28,10 @@ public class BookClubReviewService implements BookClubReviewUseCase {
         BookClub bookClub = bookClubUseCase.getById(bookClubId);
         return bookClubReviewPort.findAllByBookClubId(bookClub.getId());
     }
+
+    @Override
+    public void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId) {
+        BookClub bookClub = bookClubUseCase.getById(bookClubId);
+        bookClubReviewPort.deleteBookClubReview(bookClub.getId(), userId, bookClubReviewId);
+    }
 }

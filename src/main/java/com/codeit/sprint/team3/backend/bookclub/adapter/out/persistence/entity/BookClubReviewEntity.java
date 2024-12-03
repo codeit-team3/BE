@@ -38,4 +38,8 @@ public class BookClubReviewEntity {
     public BookClubReview toDomain() {
         return BookClubReview.of(id, bookClubId, userId, rating, content);
     }
+
+    public void inactivate() {
+        isInactive = true;
+    }
 }
