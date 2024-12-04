@@ -15,6 +15,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    /*
+    * 필터체인에서 발생한 AuthenticationException은 ExceptionHandlerFilter에서 직접 캐치할 수 없다.
+    * 인증이 필요한 경로에 토큰이 포함되지 않는 경우를 핸들링한다.
+    * */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {

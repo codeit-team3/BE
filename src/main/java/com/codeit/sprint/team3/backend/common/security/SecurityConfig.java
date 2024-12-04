@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -26,13 +27,14 @@ public class SecurityConfig {
         http.
                 csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/auths/signup/**", "/auths/signin/**")
+                        req.requestMatchers("/auths/signup/**", "/auths/signin/**", "/auths/refresh/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling(e ->
                         e.authenticationEntryPoint(authenticationEntryPoint));
 

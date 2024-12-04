@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LogoutRequest {
-    @NotBlank(message = "accessToken은 필수값입니다.")
-    private String accessToken;
-
-    @NotBlank(message = "refreshToken은 필수값입니다.")
+public class RefreshRequest {
+    @NotBlank(message = "토큰은 필수값입니다.")
     private String refreshToken;
 }

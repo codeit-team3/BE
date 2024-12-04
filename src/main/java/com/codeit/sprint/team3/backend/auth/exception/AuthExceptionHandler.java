@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.auth.exception;
 
+import com.codeit.sprint.team3.backend.common.security.ExpiredRefreshTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -42,6 +43,16 @@ public class AuthExceptionHandler {
                 Map.of(
                         "code", "INVALID_CREDENTIALS",
                         "message", ex.getMessage()
+                )
+        );
+    }
+
+    @ExceptionHandler({InvalidRefreshTokenException.class, ExpiredRefreshTokenException.class})
+    public ResponseEntity<Map<String, String>> handleRefreshTokenException(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                Map.of(
+                        "code", "UNAUTHORIZED",
+                        "message", e.getMessage()
                 )
         );
     }

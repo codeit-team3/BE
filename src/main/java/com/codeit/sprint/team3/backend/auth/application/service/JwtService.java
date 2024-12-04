@@ -39,6 +39,10 @@ public class JwtService {
         return generateToken(Map.of("type", "REFRESH"), userDetails, jwtConfig.getRefreshExpiration());
     }
 
+    public boolean isRefreshToken(String token) {
+        return extractClaim(token, claims -> claims.get("type")).equals("REFRESH");
+    }
+
     public String generateToken(UserDetails userDetails, long expirationTime) {
         return generateToken(new HashMap<>(), userDetails, expirationTime);
     }
@@ -58,12 +62,16 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public boolean isTokenInvalid(String token, UserDetails userDetails) {
+        try {
+            final String username = extractUsername(token);
+            return !(username.equals(userDetails.getUsername()));
+        } catch (Exception e) {
+            return true;
+        }
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
