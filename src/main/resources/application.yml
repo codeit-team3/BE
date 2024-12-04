@@ -1,5 +1,6 @@
 spring:
   datasource:
+    #url: jdbc:h2:tcp://localhost/~/test
     url: jdbc:h2:mem:test
     driver-class-name: org.h2.Driver
     username: sa
@@ -12,6 +13,17 @@ spring:
         validator:
           apply_to_ddl: true
         format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
   servlet:
     multipart:
       max-file-size: 50MB
@@ -22,6 +34,14 @@ spring:
 
 logging:
   level:
+    org.hibernate.type: info
+    org.springframework.data.redis: debug
+    org.springframework.security: DEBUG
     org.springframework.web.client: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.orm.jdbc.bind: trace
+
+jwt:
+  secret: 4e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8
+  access_expiration: 900000
+  refresh_expiration: 86400000

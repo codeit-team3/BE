@@ -2,8 +2,8 @@ package com.codeit.sprint.team3.backend.auth.application.service;
 
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserCommand;
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserUseCase;
-import com.codeit.sprint.team3.backend.auth.application.port.out.CreateUserPort;
-import com.codeit.sprint.team3.backend.auth.application.port.out.LoadUserPort;
+import com.codeit.sprint.team3.backend.auth.application.port.out.user.CreateUserPort;
+import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
 import com.codeit.sprint.team3.backend.auth.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

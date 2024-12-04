@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import java.util.Map;
 
 @ControllerAdvice(basePackages = "com.codeit.sprint.team3.backend.auth")
@@ -40,9 +41,10 @@ public class AuthExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 Map.of(
                         "code", "INVALID_CREDENTIALS",
-                        "message", "잘못된 이메일 또는 비밀번호입니다"
+                        "message", ex.getMessage()
                 )
         );
     }
+
 
 }

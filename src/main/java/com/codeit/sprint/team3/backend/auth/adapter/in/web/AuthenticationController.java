@@ -1,8 +1,6 @@
 package com.codeit.sprint.team3.backend.auth.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.AuthenticationRequest;
-import com.codeit.sprint.team3.backend.auth.application.port.in.AuthenticationResponse;
-import com.codeit.sprint.team3.backend.auth.application.port.in.AuthenticationUseCase;
+import com.codeit.sprint.team3.backend.auth.application.port.in.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +24,13 @@ public class AuthenticationController {
             @RequestBody @Valid AuthenticationRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationUseCase.authenticate(request));
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<LogoutResponse> signout(
+            @RequestBody @Valid LogoutRequest request
+    ) {
+        return ResponseEntity.ok(authenticationUseCase.logout(request));
     }
 
 }
