@@ -18,7 +18,7 @@ class RegisterUserCommandTest {
     @DisplayName("이름이 공백일 때 예외가 발생해야 한다.")
     void test1() {
         assertThrows(ConstraintViolationException.class, () -> {
-            new RegisterUserCommand(
+            new RegisterUserRequest(
                     "",
                     email,
                     password,
@@ -31,7 +31,7 @@ class RegisterUserCommandTest {
     @DisplayName("이메일 형식이 틀릴 때 예외가 발생해야 한다.")
     void test2() {
         assertThrows(ConstraintViolationException.class, () -> {
-            new RegisterUserCommand(
+            new RegisterUserRequest(
                     name,
                     "wrong email",
                     password,
@@ -39,7 +39,7 @@ class RegisterUserCommandTest {
                     description);
         });
         assertThrows(ConstraintViolationException.class, () -> {
-            new RegisterUserCommand(
+            new RegisterUserRequest(
                     name,
                     "wrong@",
                     password,
@@ -52,7 +52,7 @@ class RegisterUserCommandTest {
     @DisplayName("비밀번호가 공백일 때 예외가 발생해야 한다.")
     void test3() {
         assertThrows(ConstraintViolationException.class, () -> {
-            new RegisterUserCommand(
+            new RegisterUserRequest(
                     name,
                     email,
                     " ",
@@ -65,7 +65,7 @@ class RegisterUserCommandTest {
     @DisplayName("닉네임이 공백일 때 예외가 발생해야 한다.")
     void test4() {
         assertThrows(ConstraintViolationException.class, () -> {
-            new RegisterUserCommand(
+            new RegisterUserRequest(
                     name,
                     email,
                     password,
@@ -77,8 +77,8 @@ class RegisterUserCommandTest {
     @Test
     @DisplayName("정상 입력은 객체를 생성해야한다.")
     void test5() {
-        RegisterUserCommand command =
-                new RegisterUserCommand(
+        RegisterUserRequest command =
+                new RegisterUserRequest(
                     name,
                     email,
                     password,

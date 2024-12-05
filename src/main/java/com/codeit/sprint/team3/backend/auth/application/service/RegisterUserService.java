@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.auth.application.service;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserCommand;
+import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserRequest;
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserUseCase;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.CreateUserPort;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
@@ -18,7 +18,7 @@ public class RegisterUserService implements RegisterUserUseCase {
     private final LoadUserPort loadUserPort;
 
     @Override
-    public Long register(RegisterUserCommand command) {
+    public Long register(RegisterUserRequest command) {
         if(loadUserPort.existsByEmail(command.getEmail())) {
             throw new EmailAlreadyExistsException(command.getEmail() + " 이미 가입된 이메일입니다.");
         }

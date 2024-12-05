@@ -1,7 +1,7 @@
 package com.codeit.sprint.team3.backend.auth.application.port.out.user;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserCommand;
+import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserRequest;
 
 public interface CreateUserPort {
-    Long createUser(RegisterUserCommand command);
+    Long createUser(RegisterUserRequest command);
 }

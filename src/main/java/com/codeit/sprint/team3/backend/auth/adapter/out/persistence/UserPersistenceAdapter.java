@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.auth.adapter.out.persistence;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserCommand;
+import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserRequest;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.CreateUserPort;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
@@ -20,7 +20,7 @@ public class UserPersistenceAdapter implements CreateUserPort, LoadUserPort {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long createUser(RegisterUserCommand command) {
+    public Long createUser(RegisterUserRequest command) {
         UserEntity userEntity = new UserEntity(
                 command.getName(),
                 command.getEmail(),
