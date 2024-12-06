@@ -1,8 +1,8 @@
 package com.codeit.sprint.team3.backend.bookclub.application.service;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubNotExistException;
-import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
+import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubMemberPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.*;
@@ -17,7 +17,7 @@ import java.util.List;
 public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
     private final QueryBookClubPort queryBookClubPort;
-    private final BookClubMemberUseCase bookClubMemberUseCase;
+    private final CommandBookClubMemberPort commandBookClubMemberPort;
 
     @Override
     public void createBookClub(BookClub bookClub, Long userId) {
@@ -25,7 +25,7 @@ public class BookClubService implements BookClubUseCase {
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
 
         //save the creator as a member
-        bookClubMemberUseCase.saveMember(Member.of(savedBookClub.getId(), userId));
+        commandBookClubMemberPort.save(BookClubMember.of(savedBookClub.getId(), userId));
 
         /**
          * TODO 채팅 구현되면 아래 로직 추가하기

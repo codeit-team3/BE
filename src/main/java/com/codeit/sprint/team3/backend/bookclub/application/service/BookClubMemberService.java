@@ -6,7 +6,7 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseC
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubMemberPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
-import com.codeit.sprint.team3.backend.bookclub.domain.Member;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookClubMemberService implements BookClubMemberUseCase {
     private final CommandBookClubMemberPort commandBookClubMemberPort;
     private final BookClubUseCase bookClubUseCase;
-
-    @Override
-    public void saveMember(Member member) {
-        commandBookClubMemberPort.save(BookClubMemberEntity.from(member));
-    }
 
     @Override
     @Transactional
