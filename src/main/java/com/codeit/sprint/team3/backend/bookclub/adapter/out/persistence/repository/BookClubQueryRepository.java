@@ -2,7 +2,9 @@ package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.reposit
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
+import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.core.util.StringUtils;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubEntity.bookClubEntity;
@@ -21,7 +24,7 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate) {
+    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate, OrderType orderType) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
@@ -33,6 +36,7 @@ public class BookClubQueryRepository {
         if (targetDate != null) {
             builder.and(bookClubEntity.targetDate.eq(targetDate));
         }
+
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId))
@@ -41,7 +45,21 @@ public class BookClubQueryRepository {
                         filterEnum(meetingType, bookClubEntity.meetingType),
                         builder)
                 .groupBy(bookClubEntity.id)
+                .orderBy(getOrderSpecifiers(orderType))
                 .fetch();
+    }
+
+    private OrderSpecifier<?> getOrderSpecifiers(OrderType orderType) {
+        if (orderType == OrderType.DESC) {
+            return bookClubEntity.createdAt.desc();
+        }
+        if (orderType == OrderType.END) {
+            return bookClubEntity.endDate.desc();
+        }
+        if (orderType == OrderType.SOON) {
+            return bookClubEntity.targetDate.desc();
+        }
+        throw new IllegalArgumentException("지원하지 않는 정렬 타입입니다 : " + orderType);
     }
 
     private static QBookClubDto getBookClubDtoProjection() {

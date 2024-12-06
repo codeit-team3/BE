@@ -1,12 +1,14 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
+import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
+import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -58,11 +60,12 @@ public class BookClubController {
     public ResponseEntity<BookClubResponses> findBookClubs(
             @RequestParam(defaultValue = "ALL") String bookClubType,
             @RequestParam(defaultValue = "ALL") String meetingType,
+            @RequestParam(defaultValue = "DESC") String order,
             Integer memberLimit,
             String location, //동 단위 town
             LocalDate targetDate
     ) {
-        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate);
+        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order));
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
