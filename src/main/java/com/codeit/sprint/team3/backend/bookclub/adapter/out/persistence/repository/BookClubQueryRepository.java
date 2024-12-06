@@ -36,6 +36,7 @@ public class BookClubQueryRepository {
         if (targetDate != null) {
             builder.and(bookClubEntity.targetDate.eq(targetDate));
         }
+        //TODO: 정렬 기준 응답 오면 필요시 조건 추가하기
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
