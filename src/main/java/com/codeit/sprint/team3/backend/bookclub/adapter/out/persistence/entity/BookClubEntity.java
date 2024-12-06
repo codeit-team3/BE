@@ -24,8 +24,8 @@ public class BookClubEntity {
     private String description;
     private MeetingType meetingType;
     private BookClubType bookClubType;
-    private LocalDate targetDate;
-    private LocalDate endDate;
+    private LocalDate targetDate; // 모임 날짜
+    private LocalDate endDate; // 모임 마감 날짜
     private int memberLimit;
     private String city;
     private String town;
