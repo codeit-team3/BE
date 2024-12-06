@@ -2,7 +2,7 @@ package com.codeit.sprint.team3.backend.auth.application.service;
 
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserRequest;
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserUseCase;
-import com.codeit.sprint.team3.backend.auth.application.port.out.user.CreateUserPort;
+import com.codeit.sprint.team3.backend.auth.application.port.out.user.SaveUserPort;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
 import com.codeit.sprint.team3.backend.auth.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RegisterUserService implements RegisterUserUseCase {
 
-    private final CreateUserPort createUserPort;
+    private final SaveUserPort createUserPort;
     private final LoadUserPort loadUserPort;
 
     @Override
@@ -22,6 +22,6 @@ public class RegisterUserService implements RegisterUserUseCase {
         if(loadUserPort.existsByEmail(command.getEmail())) {
             throw new EmailAlreadyExistsException(command.getEmail() + " 이미 가입된 이메일입니다.");
         }
-        return createUserPort.createUser(command);
+        return createUserPort.saveUser(command);
     }
 }

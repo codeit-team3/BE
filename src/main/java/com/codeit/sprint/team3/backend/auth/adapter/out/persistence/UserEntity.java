@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,25 +33,37 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @Column(nullable = false)
+    private String image;
+
+    @Column(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private ZonedDateTime createdAt;
+
+    @Column(nullable = false)
+    private ZonedDateTime updatedAt;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public UserEntity(String name, String email, String password, String nickname, String description, Role role) {
+    public UserEntity(String name, String email, String password, String image, String nickname, String description, ZonedDateTime createdAt, ZonedDateTime updatedAt, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.image = image;
         this.nickname = nickname;
         this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.role = role;
     }
 
     public User toUser() {
-        return new User(id, name, nickname, email, description, "image not yet implemented", LocalDateTime.now(), LocalDateTime.now());
+        return new User(id, name, nickname, email, description, image, createdAt, updatedAt);
     }
 
     @Override
