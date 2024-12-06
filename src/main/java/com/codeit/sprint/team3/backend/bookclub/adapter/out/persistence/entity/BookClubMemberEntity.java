@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
-import com.codeit.sprint.team3.backend.bookclub.domain.Member;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubMember;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +27,7 @@ public class BookClubMemberEntity {
         this.userId = userId;
     }
 
-    public static BookClubMemberEntity from(Member member) {
+    public static BookClubMemberEntity from(BookClubMember member) {
         return new BookClubMemberEntity(member.getBookClubId(), member.getUserId());
     }
 
