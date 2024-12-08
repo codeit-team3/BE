@@ -8,7 +8,6 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseC
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,7 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,8 +29,8 @@ public class BookClubController {
     @SneakyThrows
     @PostMapping
     public ResponseEntity<Void> createBookClub(
-            @RequestPart(required = false) MultipartFile image,
-            @RequestPart(name = "data") @Valid CreateBookClubRequest createBookClubRequest
+            @RequestPart MultipartFile image,
+            @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
     ) {
         validateImage(image);
         //TODO 이미지 저장
@@ -63,7 +62,7 @@ public class BookClubController {
             @RequestParam(defaultValue = "DESC") String order,
             Integer memberLimit,
             String location, //동 단위 town
-            LocalDate targetDate
+            LocalDateTime targetDate
     ) {
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order));
         return ResponseEntity.ok()
