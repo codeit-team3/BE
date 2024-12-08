@@ -25,3 +25,4 @@ logging:
     org.springframework.web.client: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.orm.jdbc.bind: trace
+    root: debug
