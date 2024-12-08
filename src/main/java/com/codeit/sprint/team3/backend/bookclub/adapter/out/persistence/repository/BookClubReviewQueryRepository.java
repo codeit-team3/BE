@@ -20,6 +20,7 @@ public class BookClubReviewQueryRepository {
                         bookClubReviewEntity.bookClubId.eq(id),
                         bookClubReviewEntity.isInactive.isFalse()
                 )
+                .orderBy(bookClubReviewEntity.createdAt.desc())
                 .fetch();
     }
 }

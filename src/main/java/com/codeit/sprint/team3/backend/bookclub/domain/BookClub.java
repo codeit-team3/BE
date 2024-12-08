@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class BookClub {
@@ -13,8 +13,8 @@ public class BookClub {
     private final String description;
     private final MeetingType meetingType;
     private final BookClubType bookClubType;
-    private final LocalDate targetDate;
-    private final LocalDate endDate;
+    private final LocalDateTime targetDate;
+    private final LocalDateTime endDate;
     private final int memberLimit;
     private final String city;
     private final String town;
@@ -22,7 +22,7 @@ public class BookClub {
     private final int memberCount;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -37,7 +37,7 @@ public class BookClub {
         this.memberCount = memberCount;
     }
 
-    public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town) {
+    public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town) {
         return BookClub.builder()
                 .title(title)
                 .description(description)
@@ -51,7 +51,7 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy) {
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -67,7 +67,7 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
         return BookClub.builder()
                 .id(id)
                 .title(title)

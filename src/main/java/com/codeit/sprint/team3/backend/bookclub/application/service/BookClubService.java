@@ -8,18 +8,21 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookCl
 import com.codeit.sprint.team3.backend.bookclub.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
     private final QueryBookClubPort queryBookClubPort;
     private final CommandBookClubMemberPort commandBookClubMemberPort;
 
     @Override
+    @Transactional
     public void createBookClub(BookClub bookClub, Long userId) {
         //book club creation logic
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
@@ -36,7 +39,7 @@ public class BookClubService implements BookClubUseCase {
     }
 
     @Override
-    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate, OrderType orderType) {
+    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType) {
         return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate, orderType);
     }
 

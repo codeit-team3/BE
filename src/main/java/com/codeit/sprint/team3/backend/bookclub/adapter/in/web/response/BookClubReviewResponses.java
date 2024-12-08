@@ -4,7 +4,7 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 
 import java.util.List;
 
-public record BookClubReviewResponses(List<BookClubReviewResponse> bookClubReviewResponses) {
+public record BookClubReviewResponses(List<BookClubReviewResponse> reviews) {
     public static BookClubReviewResponses from(List<BookClubReview> bookClubReviews) {
         List<BookClubReviewResponse> list = bookClubReviews.stream()
                 .map(BookClubReviewResponse::from)

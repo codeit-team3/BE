@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/book-clubs/likes")
+@RequestMapping("/api/v1/book-clubs/{id}/likes")
 public class BookClubLikeController {
     private final BookClubLikeUseCase bookClubLikeUseCase;
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<Void> likeBookClub(@PathVariable Long id) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;
@@ -21,7 +21,7 @@ public class BookClubLikeController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     public ResponseEntity<Void> unlikeBookClub(@PathVariable Long id) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;

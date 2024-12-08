@@ -1,8 +1,8 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,8 +23,8 @@ public class BookClubEntity {
     private String description;
     private MeetingType meetingType;
     private BookClubType bookClubType;
-    private LocalDate targetDate; // 모임 날짜
-    private LocalDate endDate; // 모임 마감 날짜
+    private LocalDateTime targetDate; // 모임 날짜
+    private LocalDateTime endDate; // 모임 마감 날짜
     private int memberLimit;
     private String city;
     private String town;
@@ -42,8 +41,8 @@ public class BookClubEntity {
             String description,
             MeetingType meetingType,
             BookClubType bookClubType,
-            LocalDate targetDate,
-            LocalDate endDate,
+            LocalDateTime targetDate,
+            LocalDateTime endDate,
             int memberLimit,
             String city,
             String town,
