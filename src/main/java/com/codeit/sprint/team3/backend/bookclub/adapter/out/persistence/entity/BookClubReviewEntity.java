@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 public class BookClubReviewEntity {
@@ -20,6 +22,7 @@ public class BookClubReviewEntity {
     private String content;
     @ColumnDefault("false")
     private boolean isInactive;
+    private LocalDateTime createdAt;
 
     protected BookClubReviewEntity() {
     }
@@ -29,10 +32,11 @@ public class BookClubReviewEntity {
         this.userId = userId;
         this.rating = rating;
         this.content = content;
+        this.createdAt = LocalDateTime.now();
     }
 
     public static BookClubReviewEntity from(BookClubReview bookClubReview) {
-        return new BookClubReviewEntity(bookClubReview.getId(), bookClubReview.getUserId(), bookClubReview.getRating(), bookClubReview.getContent());
+        return new BookClubReviewEntity(bookClubReview.getBookClubId(), bookClubReview.getUserId(), bookClubReview.getRating(), bookClubReview.getContent());
     }
 
     public BookClubReview toDomain() {

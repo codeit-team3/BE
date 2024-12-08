@@ -12,7 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +23,7 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate, OrderType orderType) {
+    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
@@ -34,9 +33,15 @@ public class BookClubQueryRepository {
             builder.and(bookClubEntity.memberLimit.eq(memberLimit));
         }
         if (targetDate != null) {
-            builder.and(bookClubEntity.targetDate.eq(targetDate));
+            LocalDateTime nextDayStart = targetDate.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+            LocalDateTime currentDayStart = targetDate.withHour(0).withMinute(0).withSecond(0).withNano(0);
+            builder.and(bookClubEntity.targetDate.goe(currentDayStart)); // 현재 날짜 시작 시간보다 크거나 같고
+            builder.and(bookClubEntity.targetDate.lt(nextDayStart));     // 다음 날 시작 시간보다 작은 조건);
+
         }
-        //TODO: 정렬 기준 응답 오면 필요시 조건 추가하기
+        if (orderType == OrderType.END) {
+            builder.and(bookClubEntity.endDate.goe(LocalDateTime.now()));
+        }
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
@@ -56,9 +61,6 @@ public class BookClubQueryRepository {
         }
         if (orderType == OrderType.END) {
             return bookClubEntity.endDate.desc();
-        }
-        if (orderType == OrderType.SOON) {
-            return bookClubEntity.targetDate.desc();
         }
         throw new IllegalArgumentException("지원하지 않는 정렬 타입입니다 : " + orderType);
     }

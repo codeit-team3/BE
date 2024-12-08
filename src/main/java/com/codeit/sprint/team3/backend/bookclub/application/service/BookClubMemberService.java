@@ -1,18 +1,17 @@
 package com.codeit.sprint.team3.backend.bookclub.application.service;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubMemberAlreadyExistsException;
-import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubMemberEntity;
+import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubMemberPort;
-import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClubMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookClubMemberService implements BookClubMemberUseCase {
     private final CommandBookClubMemberPort commandBookClubMemberPort;
     private final BookClubUseCase bookClubUseCase;

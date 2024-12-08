@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubReviewNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewEntityRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewQueryRepository;
@@ -32,7 +33,7 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     @Override
     public void deleteBookClubReview(Long id, Long userId, Long bookClubReviewId) {
         BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndBookClubIdAndUserIdAndIsInactiveFalse(id, bookClubReviewId, userId)
-                .orElseThrow(() -> new IllegalArgumentException("Book club review not found"));
+                .orElseThrow(BookClubReviewNotExistException::new);
         bookClubReviewEntity.inactivate();
     }
 }

@@ -32,6 +32,7 @@ public class BookClubReview {
 
     public static BookClubReview of(Long id, Long bookClubId, Long userId, Integer rating, String content) {
         return BookClubReview.builder()
+                .id(id)
                 .userId(userId)
                 .bookClubId(bookClubId)
                 .rating(rating)
