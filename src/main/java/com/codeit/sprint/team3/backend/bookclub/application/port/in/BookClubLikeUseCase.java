@@ -6,6 +6,4 @@ public interface BookClubLikeUseCase {
     void saveBookClubLike(Long bookClubId, Long userId);
 
     void deleteBookClubLike(Long bookClubId, Long userId);
-
-    BookClub getBookClubById(Long bookClubId);
 }
