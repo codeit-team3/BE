@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/book-clubs")
+@RequestMapping("/api/v1/book-clubs/{id}")
 public class BookClubMemberController {
     private final BookClubMemberUseCase bookClubMemberUseCase;
 
-    @PostMapping("/join/{id}")
+    @PostMapping("/join")
     public ResponseEntity<Void> joinBookClub(@PathVariable Long id) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;
@@ -20,7 +20,7 @@ public class BookClubMemberController {
                 .build();
     }
 
-    @DeleteMapping("/leave/{id}")
+    @DeleteMapping("/leave")
     public ResponseEntity<Void> leaveBookClub(@PathVariable Long id) {
         //TODO 로그인 여부 확인 및 데이터 가져오기
         Long userId = 1L;
