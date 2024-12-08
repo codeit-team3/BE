@@ -1,20 +1,33 @@
 package com.codeit.sprint.team3.backend.auth.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.ZonedDateTime;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 public class User {
-    private final Long id;
-    private final String name;
-    private final String nickname;
-    private final String email;
-    private final String description;
-    private final String image;
-    private final ZonedDateTime createdAt;
-    private final ZonedDateTime updatedAt;
+    private Long id;
+    private String name;
+    private String nickname;
+    private String email;
+    private String description;
+    private String image;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setUpdatedAt(ZonedDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auths")
+@RequestMapping("/api/v1/auths")
 public class AuthenticationController {
 
     private final AuthenticationUseCase authenticationUseCase;

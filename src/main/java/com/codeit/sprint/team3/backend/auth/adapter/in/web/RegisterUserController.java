@@ -8,22 +8,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auths")
+@RequestMapping("/api/v1/auths")
 public class RegisterUserController {
 
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, String>> register(
-            @Valid @RequestBody RegisterUserRequest request
+    public ResponseEntity<Void> register(
+            @RequestBody @Valid RegisterUserRequest request
     ) {
-
         registerUserUseCase.register(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "사용자 생성 성공"));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

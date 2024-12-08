@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auths")
+@RequestMapping("/api/v1/auths")
 @RequiredArgsConstructor
 public class UserProfileController {
 
@@ -19,21 +19,21 @@ public class UserProfileController {
     public ResponseEntity<UserProfileDto> getUser() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return ResponseEntity.ok(UserProfileDto.toDto(userProfileUseCase.getUserByEmail(userEmail)));
+        return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.getUserByEmail(userEmail)));
     }
 
     @PostMapping("/user")
     public ResponseEntity<UserProfileDto> updateUser(
             @RequestBody @Valid UpdateUserProfileCommand command
-            ) {
+    ) {
         validateCommand(command);
 
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return ResponseEntity.ok(UserProfileDto.toDto(userProfileUseCase.updateUserProfile(userEmail, command)));
+        return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.updateUserProfile(userEmail, command)));
     }
 
-    public void validateCommand(UpdateUserProfileCommand command) {
+    private void validateCommand(UpdateUserProfileCommand command) {
         if (isBlank(command.getNickname()) && isBlank(command.getImage())) {
             throw new IllegalArgumentException("닉네임과 이미지는 모두 공백일 수 없습니다.");
         }

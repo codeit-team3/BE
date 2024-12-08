@@ -1,8 +1,9 @@
 package com.codeit.sprint.team3.backend.auth.adapter.out.persistence;
 
 import com.codeit.sprint.team3.backend.auth.application.port.in.RegisterUserRequest;
-import com.codeit.sprint.team3.backend.auth.application.port.out.user.SaveUserPort;
+import com.codeit.sprint.team3.backend.auth.application.port.out.user.RegisterUserPort;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
+import com.codeit.sprint.team3.backend.auth.application.port.out.user.UpdateUserPort;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,13 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-public class UserPersistenceAdapter implements SaveUserPort, LoadUserPort {
+public class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, UpdateUserPort {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Long saveUser(RegisterUserRequest command) {
+    public Long register(RegisterUserRequest command) {
         ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         UserEntity userEntity = new UserEntity(
                 command.getName(),
@@ -40,8 +41,15 @@ public class UserPersistenceAdapter implements SaveUserPort, LoadUserPort {
     }
 
     @Override
-    public void saveUser(UserDetails userDetails) {
-        userRepository.save((UserEntity) userDetails);
+    public void update(User user) {
+        UserEntity userEntity = userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException("회원정보 수정 실패"));
+
+        userEntity.setNickname(user.getNickname());
+        userEntity.setImage(user.getImage());
+        userEntity.setUpdatedAt(user.getUpdatedAt());
+
+        userRepository.save(userEntity);
     }
 
     @Override
@@ -51,7 +59,7 @@ public class UserPersistenceAdapter implements SaveUserPort, LoadUserPort {
 
     @Override
     public User loadUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email)).toUser();
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email)).toDomain();
     }
 
     @Override
