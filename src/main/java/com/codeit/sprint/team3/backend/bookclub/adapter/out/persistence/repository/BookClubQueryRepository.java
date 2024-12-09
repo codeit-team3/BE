@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeConversionException;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
@@ -62,7 +63,7 @@ public class BookClubQueryRepository {
         if (orderType == OrderType.END) {
             return bookClubEntity.endDate.desc();
         }
-        throw new IllegalArgumentException("지원하지 않는 정렬 타입입니다 : " + orderType);
+        throw new IllegalTypeConversionException(orderType.name());
     }
 
     private static QBookClubDto getBookClubDtoProjection() {

@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeConversionException;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 
 public enum BookClubListOrderType {
@@ -11,7 +12,7 @@ public enum BookClubListOrderType {
         return switch (orderType.toUpperCase()) {
             case "DESC" -> OrderType.DESC;
             case "END" -> OrderType.END;
-            default -> throw new IllegalArgumentException("지원하지 않는 정렬방식 : " + orderType);
+            default -> throw new IllegalTypeConversionException(orderType);
         };
     }
 }
