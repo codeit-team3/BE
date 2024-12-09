@@ -31,7 +31,7 @@ public class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, U
                 passwordEncoder.encode(command.getPassword()),
                 "",
                 command.getNickname(),
-                command.getDescription(),
+                command.getDescription()==null?"":command.getDescription(),
                 createdAt,
                 createdAt,
                 Role.USER

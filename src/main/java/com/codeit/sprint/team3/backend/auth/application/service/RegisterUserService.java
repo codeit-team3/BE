@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RegisterUserService implements RegisterUserUseCase {
 
-    private final RegisterUserPort createUserPort;
+    private final RegisterUserPort registerUserPort;
     private final LoadUserPort loadUserPort;
 
     @Override
@@ -22,6 +22,6 @@ public class RegisterUserService implements RegisterUserUseCase {
         if(loadUserPort.existsByEmail(command.getEmail())) {
             throw new EmailAlreadyExistsException(command.getEmail() + " 이미 가입된 이메일입니다.");
         }
-        return createUserPort.register(command);
+        return registerUserPort.register(command);
     }
 }
