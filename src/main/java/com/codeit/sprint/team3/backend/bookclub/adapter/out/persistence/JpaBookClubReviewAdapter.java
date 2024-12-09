@@ -31,8 +31,8 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     }
 
     @Override
-    public void deleteBookClubReview(Long id, Long userId, Long bookClubReviewId) {
-        BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndBookClubIdAndUserIdAndIsInactiveFalse(id, bookClubReviewId, userId)
+    public void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId) {
+        BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndBookClubIdAndUserIdAndIsInactiveFalse(bookClubId, bookClubReviewId, userId)
                 .orElseThrow(BookClubReviewNotExistException::new);
         bookClubReviewEntity.inactivate();
     }

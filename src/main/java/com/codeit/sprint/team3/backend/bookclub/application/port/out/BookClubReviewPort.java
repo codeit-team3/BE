@@ -7,7 +7,7 @@ import java.util.List;
 public interface BookClubReviewPort {
     void saveBookClubReview(BookClubReview bookClubReview);
 
-    List<BookClubReview> findAllByBookClubId(Long id);
+    List<BookClubReview> findAllByBookClubId(Long bookClubId);
 
-    void deleteBookClubReview(Long id, Long userId, Long bookClubReviewId);
+    void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId);
 }
