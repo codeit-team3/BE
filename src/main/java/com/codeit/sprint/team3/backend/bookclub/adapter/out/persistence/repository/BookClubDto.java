@@ -5,7 +5,6 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.querydsl.core.annotations.QueryProjection;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BookClubDto {
@@ -14,8 +13,8 @@ public class BookClubDto {
     private final String description;
     private final MeetingType meetingType;
     private final BookClubType bookClubType;
-    private final LocalDate targetDate;
-    private final LocalDate endDate;
+    private final LocalDateTime targetDate;
+    private final LocalDateTime endDate;
     private final int memberLimit;
     private final String city;
     private final String town;
@@ -24,7 +23,7 @@ public class BookClubDto {
     private final Integer memberCount;
 
     @QueryProjection
-    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDate targetDate, LocalDate endDate, int memberLimit, String city, String town, Long createdBy, LocalDateTime createdAt, int memberCount) {
+    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, LocalDateTime createdAt, int memberCount) {
         this.id = id;
         this.title = title;
         this.description = description;
