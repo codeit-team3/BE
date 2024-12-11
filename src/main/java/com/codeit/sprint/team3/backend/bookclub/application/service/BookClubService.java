@@ -1,33 +1,34 @@
 package com.codeit.sprint.team3.backend.bookclub.application.service;
 
-import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubMemberUseCase;
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
+import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubMemberPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
-import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
-import com.codeit.sprint.team3.backend.bookclub.domain.Member;
+import com.codeit.sprint.team3.backend.bookclub.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
     private final QueryBookClubPort queryBookClubPort;
-    private final BookClubMemberUseCase bookClubMemberUseCase;
+    private final CommandBookClubMemberPort commandBookClubMemberPort;
 
     @Override
+    @Transactional
     public void createBookClub(BookClub bookClub, Long userId) {
         //book club creation logic
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
 
         //save the creator as a member
-        bookClubMemberUseCase.saveMember(Member.of(savedBookClub.getId(), userId));
+        commandBookClubMemberPort.save(BookClubMember.of(savedBookClub.getId(), userId));
 
         /**
          * TODO 채팅 구현되면 아래 로직 추가하기
@@ -38,7 +39,13 @@ public class BookClubService implements BookClubUseCase {
     }
 
     @Override
-    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDate targetDate) {
-        return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate);
+    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType) {
+        return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate, orderType);
+    }
+
+    @Override
+    public BookClub getById(Long bookClubId) {
+        return queryBookClubPort.findById(bookClubId)
+                .orElseThrow(BookClubNotExistException::new);
     }
 }

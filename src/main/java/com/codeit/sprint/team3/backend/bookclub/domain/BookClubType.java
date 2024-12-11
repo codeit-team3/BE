@@ -1,5 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.domain;
 
+import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeConversionException;
+
 public enum BookClubType {
     FREE,
     FIXED,
@@ -10,7 +12,7 @@ public enum BookClubType {
         return switch (type.toUpperCase()) {
             case "FREE" -> FREE;
             case "FIXED" -> FIXED;
-            default -> throw new IllegalArgumentException("변환할 수 없는 타입입니다.: " + type);
+            default -> throw new IllegalTypeConversionException(type);
         };
     }
 
@@ -19,7 +21,7 @@ public enum BookClubType {
             case "FREE" -> FREE;
             case "FIXED" -> FIXED;
             case "ALL" -> ALL;
-            default -> throw new IllegalArgumentException("변환할 수 없는 타입입니다.: " + type);
+            default -> throw new IllegalTypeConversionException(type);
         };
     }
 }

@@ -1,9 +1,9 @@
 package com.codeit.sprint.team3.backend.bookclub.application.port.out;
 
-import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubMemberEntity;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubMember;
 
 public interface CommandBookClubMemberPort {
-    void save(BookClubMemberEntity from);
+    void save(BookClubMember bookClubMember);
 
     boolean existsByBookClubIdAndUserId(Long bookClubId, Long userId);
 
