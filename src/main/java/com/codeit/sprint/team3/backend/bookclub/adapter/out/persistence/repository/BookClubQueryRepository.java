@@ -38,7 +38,6 @@ public class BookClubQueryRepository {
             LocalDateTime currentDayStart = targetDate.withHour(0).withMinute(0).withSecond(0).withNano(0);
             builder.and(bookClubEntity.targetDate.goe(currentDayStart)); // 현재 날짜 시작 시간보다 크거나 같고
             builder.and(bookClubEntity.targetDate.lt(nextDayStart));     // 다음 날 시작 시간보다 작은 조건);
-
         }
         if (orderType == OrderType.END) {
             builder.and(bookClubEntity.endDate.goe(LocalDateTime.now()));
