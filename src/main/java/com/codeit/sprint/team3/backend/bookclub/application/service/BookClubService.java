@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +49,16 @@ public class BookClubService implements BookClubUseCase {
     public BookClub getById(Long bookClubId) {
         return queryBookClubPort.findById(bookClubId)
                 .orElseThrow(BookClubNotExistException::new);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBookClub(Long bookClubId, Long userId) {
+        BookClub bookClub = queryBookClubPort.findById(bookClubId)
+                .orElseThrow(BookClubNotExistException::new);
+        if (!Objects.equals(bookClub.getCreatedBy(), userId)) {
+            throw new BookClubNotExistException();
+        }
+        commandBookClubPort.deleteBookClub(bookClubId);
     }
 }

@@ -73,4 +73,13 @@ public class BookClubController {
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
+        //TODO 유저 security context에서 아이디 가져오기
+        Long userId = 1L;
+        bookClubUseCase.deleteBookClub(id, userId);
+        return ResponseEntity.noContent()
+                .build();
+    }
 }

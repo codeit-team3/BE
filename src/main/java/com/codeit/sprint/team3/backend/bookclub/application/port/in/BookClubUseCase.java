@@ -15,4 +15,6 @@ public interface BookClubUseCase {
     List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword);
 
     BookClub getById(Long bookClubId);
+
+    void deleteBookClub(Long bookClubId, Long userId);
 }
