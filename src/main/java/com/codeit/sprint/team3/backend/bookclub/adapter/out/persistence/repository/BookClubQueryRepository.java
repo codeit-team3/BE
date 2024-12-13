@@ -8,15 +8,18 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubEntity.bookClubEntity;
+import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubLikeEntity.bookClubLikeEntity;
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubMemberEntity.bookClubMemberEntity;
 
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType) {
+    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
@@ -42,16 +45,25 @@ public class BookClubQueryRepository {
         if (orderType == OrderType.END) {
             builder.and(bookClubEntity.endDate.goe(LocalDateTime.now()));
         }
+        BooleanExpression searchCondition = null;
+        if (!StringUtils.isNullOrEmpty(searchKeyword)) {
+            searchCondition = bookClubEntity.title.contains(searchKeyword)
+                    .or(bookClubEntity.description.contains(searchKeyword));
+        }
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId))
+                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubEntity.createdBy.eq(bookClubLikeEntity.userId)))
                 .where(
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
                         filterEnum(meetingType, bookClubEntity.meetingType),
+                        bookClubEntity.isInactive.eq(false),
                         builder)
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -79,7 +91,13 @@ public class BookClubQueryRepository {
                 bookClubEntity.town,
                 bookClubEntity.createdBy,
                 bookClubEntity.createdAt,
-                bookClubMemberEntity.count().intValue().as("memberCount"));
+                bookClubEntity.isInactive,
+                bookClubMemberEntity.count().intValue().as("memberCount"),
+                Expressions.booleanTemplate("case when {0} > 0 then true else false end",
+                                bookClubLikeEntity.count())
+                        .as("isLiked")
+        );
+
     }
 
     private <T extends Enum<T>> BooleanExpression filterEnum(T enumValue, EnumPath<T> enumPath) {

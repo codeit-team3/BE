@@ -19,10 +19,12 @@ public class BookClub {
     private final String city;
     private final String town;
     private final Long createdBy;
+    private final boolean isInactive;
     private final int memberCount;
+    private final boolean isLiked;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -35,6 +37,8 @@ public class BookClub {
         this.town = town;
         this.createdBy = createdBy;
         this.memberCount = memberCount;
+        this.isInactive = isInactive;
+        this.isLiked = isLiked;
     }
 
     public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town) {
@@ -67,7 +71,7 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount) {
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -81,6 +85,8 @@ public class BookClub {
                 .town(town)
                 .createdBy(createdBy)
                 .memberCount(memberCount)
+                .isInactive(isInactive)
+                .isLiked(isLiked)
                 .build();
     }
 }
