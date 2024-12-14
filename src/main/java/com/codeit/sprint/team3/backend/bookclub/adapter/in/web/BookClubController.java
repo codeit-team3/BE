@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
+import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
@@ -15,6 +16,7 @@ import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookClubController {
     private final BookClubUseCase bookClubUseCase;
+    private final UserProfileUseCase userProfileUseCase;
 
     @SneakyThrows
     @PostMapping
@@ -34,10 +37,11 @@ public class BookClubController {
             @RequestPart MultipartFile image,
             @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
     ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+
         validateImage(image);
         //TODO 이미지 저장
-        //TODO 유저 security context에서 아이디 가져오기
-        Long userId = 1L;
         bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
@@ -77,8 +81,9 @@ public class BookClubController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
-        //TODO 유저 security context에서 아이디 가져오기
-        Long userId = 1L;
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+
         bookClubUseCase.deleteBookClub(id, userId);
         return ResponseEntity.noContent()
                 .build();
