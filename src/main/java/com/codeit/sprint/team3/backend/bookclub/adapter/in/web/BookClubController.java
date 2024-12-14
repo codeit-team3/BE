@@ -4,6 +4,7 @@ import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCa
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
+import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubResponse;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
@@ -89,5 +90,15 @@ public class BookClubController {
         bookClubUseCase.deleteBookClub(id, userId);
         return ResponseEntity.noContent()
                 .build();
+    }
+
+    @GetMapping("/{bookClubId}")
+    public ResponseEntity<BookClubResponse> findBookClub(@PathVariable Long bookClubId) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+
+        BookClub bookClub = bookClubUseCase.findBookClubById(bookClubId, userId);
+        return ResponseEntity.ok()
+                .body(BookClubResponse.from(bookClub));
     }
 }

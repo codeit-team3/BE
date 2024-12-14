@@ -14,4 +14,6 @@ public interface QueryBookClubPort {
     List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId);
 
     Optional<BookClub> findById(Long bookClubId);
+
+    BookClub findBookClubById(Long bookClubId, Long userId);
 }

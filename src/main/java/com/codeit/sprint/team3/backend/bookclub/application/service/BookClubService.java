@@ -61,4 +61,9 @@ public class BookClubService implements BookClubUseCase {
         }
         commandBookClubPort.deleteBookClub(bookClubId);
     }
+
+    @Override
+    public BookClub findBookClubById(Long bookClubId, Long userId) {
+        return queryBookClubPort.findBookClubById(bookClubId, userId);
+    }
 }

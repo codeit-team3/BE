@@ -47,12 +47,12 @@ public class BookClubQueryRepository {
         }
         if (!StringUtils.isNullOrEmpty(searchKeyword)) {
             builder.and(bookClubEntity.title.contains(searchKeyword)
-                    .or(bookClubEntity.description.contains(searchKeyword)));
+                    .or(bookClubEntity.town.contains(searchKeyword)));
         }
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .where(
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
@@ -87,7 +87,6 @@ public class BookClubQueryRepository {
                 bookClubEntity.targetDate,
                 bookClubEntity.endDate,
                 bookClubEntity.memberLimit,
-                bookClubEntity.city,
                 bookClubEntity.town,
                 bookClubEntity.createdBy,
                 bookClubEntity.createdAt,
@@ -105,5 +104,18 @@ public class BookClubQueryRepository {
             return null;
         }
         return enumPath.eq(enumValue);
+    }
+
+    public BookClubDto findBookClubBy(Long bookClubId, Long userId) {
+        return jpaQueryFactory.select(getBookClubDtoProjection())
+                .from(bookClubEntity)
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
+                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .where(
+                        bookClubEntity.isInactive.eq(false),
+                        bookClubEntity.id.eq(bookClubId)
+                )
+                .groupBy(bookClubEntity.id)
+                .fetchOne();
     }
 }
