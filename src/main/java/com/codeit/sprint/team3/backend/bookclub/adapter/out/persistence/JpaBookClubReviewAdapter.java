@@ -41,4 +41,12 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
                 .orElseThrow(BookClubReviewNotExistException::new);
         bookClubReviewEntity.inactivate();
     }
+
+    @Override
+    public List<BookClubReview> findMyReviews(Long userId, Pageable pageable, OrderType orderType) {
+        return bookClubReviewQueryRepository.findMyReviews(userId, pageable, orderType)
+                .stream()
+                .map(BookClubReviewEntity::toDomain)
+                .toList();
+    }
 }

@@ -34,6 +34,7 @@ public class BookClubReviewQueryRepository {
     private static OrderSpecifier<?> getDesc(OrderType order) {
         return switch (order) {
             case DESC -> bookClubReviewEntity.createdAt.desc();
+            case ASC -> bookClubReviewEntity.createdAt.asc();
             case RATE_ASC -> bookClubReviewEntity.rating.asc();
             case RATE_DESC -> bookClubReviewEntity.rating.desc();
             default -> throw new IllegalTypeConversionException(order.name());
@@ -50,5 +51,17 @@ public class BookClubReviewQueryRepository {
                 .where(bookClubReviewEntity.bookClubId.eq(bookClubId))
                 .fetchOne();
         return rate == null ? 0 : rate;
+    }
+
+    public List<BookClubReviewEntity> findMyReviews(Long userId, Pageable pageable, OrderType orderType) {
+        return jpaQueryFactory.selectFrom(bookClubReviewEntity)
+                .where(
+                        bookClubReviewEntity.userId.eq(userId),
+                        bookClubReviewEntity.isInactive.isFalse()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(getDesc(orderType))
+                .fetch();
     }
 }
