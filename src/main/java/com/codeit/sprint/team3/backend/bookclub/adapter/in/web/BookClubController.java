@@ -73,8 +73,10 @@ public class BookClubController {
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword);
+        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }

@@ -12,7 +12,7 @@ import java.util.List;
 public interface BookClubUseCase {
     void createBookClub(BookClub bookClub, Long userId);
 
-    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword);
+    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId);
 
     BookClub getById(Long bookClubId);
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QueryBookClubPort {
-    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword);
+    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId);
 
     Optional<BookClub> findById(Long bookClubId);
 }
