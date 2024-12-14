@@ -5,8 +5,8 @@ on:
     branches: [ dev ]
 
 env:
-  NAME: codeit
-  REPO: bookco
+  NAME: parkhyuntae
+  REPO: codeit
 
 jobs:
   build:
@@ -24,10 +24,9 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: build
-          build-root-directory: codeit
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
