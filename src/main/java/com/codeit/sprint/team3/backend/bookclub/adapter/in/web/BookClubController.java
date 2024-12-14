@@ -101,4 +101,18 @@ public class BookClubController {
         return ResponseEntity.ok()
                 .body(BookClubResponse.from(bookClub));
     }
+
+    @GetMapping("/my-created")
+    public ResponseEntity<BookClubResponses> findMyCreatedBookClubs(
+            @RequestParam(defaultValue = "DESC") String order,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        return ResponseEntity.ok()
+                .body(BookClubResponses.from(bookClubs));
+    }
 }

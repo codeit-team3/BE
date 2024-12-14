@@ -59,4 +59,12 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
         }
         return bookClubDto.toModel();
     }
+
+    @Override
+    public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
+        return bookClubQueryRepository.findMyCreatedBookClubs(userId, orderType, pageable)
+                .stream()
+                .map(BookClubDto::toModel)
+                .toList();
+    }
 }

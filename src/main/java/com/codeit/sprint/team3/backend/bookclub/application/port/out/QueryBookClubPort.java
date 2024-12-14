@@ -16,4 +16,6 @@ public interface QueryBookClubPort {
     Optional<BookClub> findById(Long bookClubId);
 
     BookClub findBookClubById(Long bookClubId, Long userId);
+
+    List<BookClub> findMyCreatedBookClubs(Long userId, OrderType from, Pageable pageable);
 }

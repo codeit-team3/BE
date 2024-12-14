@@ -71,6 +71,9 @@ public class BookClubQueryRepository {
         if (orderType == OrderType.DESC) {
             return bookClubEntity.createdAt.desc();
         }
+        if (orderType == OrderType.ASC) {
+            return bookClubEntity.createdAt.asc();
+        }
         if (orderType == OrderType.END) {
             return bookClubEntity.endDate.desc();
         }
@@ -117,5 +120,21 @@ public class BookClubQueryRepository {
                 )
                 .groupBy(bookClubEntity.id)
                 .fetchOne();
+    }
+
+    public List<BookClubDto> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
+        return jpaQueryFactory.select(getBookClubDtoProjection())
+                .from(bookClubEntity)
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
+                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .where(
+                        bookClubEntity.isInactive.eq(false),
+                        bookClubEntity.createdBy.eq(userId)
+                )
+                .groupBy(bookClubEntity.id)
+                .orderBy(getOrderSpecifiers(orderType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
     }
 }

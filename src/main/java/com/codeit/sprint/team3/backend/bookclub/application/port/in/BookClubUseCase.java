@@ -19,4 +19,6 @@ public interface BookClubUseCase {
     void deleteBookClub(Long bookClubId, Long userId);
 
     BookClub findBookClubById(Long bookClubId, Long userId);
+
+    List<BookClub> findMyCreatedBookClubs(Long userId, OrderType from, Pageable pageable);
 }

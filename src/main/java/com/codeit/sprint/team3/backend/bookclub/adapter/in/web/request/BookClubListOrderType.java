@@ -15,4 +15,13 @@ public enum BookClubListOrderType {
             default -> throw new IllegalTypeConversionException(orderType);
         };
     }
+
+    //TODO: 읔... 리팩토링하자...
+    public static OrderType myBookClubOrderType(String orderType) {
+        return switch (orderType.toUpperCase()) {
+            case "DESC" -> OrderType.DESC;
+            case "ASC" -> OrderType.ASC;
+            default -> throw new IllegalTypeConversionException(orderType);
+        };
+    }
 }
