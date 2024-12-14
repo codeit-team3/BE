@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +32,8 @@ public class BookClubEntity {
     private Long createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @ColumnDefault("false")
+    private Boolean isInactive;
 
     protected BookClubEntity() {
     }
@@ -48,7 +51,8 @@ public class BookClubEntity {
             String town,
             Long createdBy,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Boolean isInactive
     ) {
         this.title = title;
         this.description = description;
@@ -62,6 +66,7 @@ public class BookClubEntity {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.isInactive = isInactive;
     }
 
     public static BookClubEntity of(BookClub bookClub, Long userId) {
@@ -78,10 +83,15 @@ public class BookClubEntity {
                 .createdBy(userId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .isInactive(false)
                 .build();
     }
 
     public BookClub toModel() {
         return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, city, town, createdBy);
+    }
+
+    public void delete() {
+        this.isInactive = true;
     }
 }

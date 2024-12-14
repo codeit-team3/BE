@@ -9,8 +9,10 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -60,12 +62,25 @@ public class BookClubController {
             @RequestParam(defaultValue = "ALL") String bookClubType,
             @RequestParam(defaultValue = "ALL") String meetingType,
             @RequestParam(defaultValue = "DESC") String order,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            String searchKeyword,
             Integer memberLimit,
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order));
+        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
+        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
+        //TODO 유저 security context에서 아이디 가져오기
+        Long userId = 1L;
+        bookClubUseCase.deleteBookClub(id, userId);
+        return ResponseEntity.noContent()
+                .build();
     }
 }
