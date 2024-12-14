@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
 
 @Configuration
 public class SwaggerConfig {
@@ -14,17 +17,19 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         String jwt = "JWT";
-        //SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
         Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
                 .name(jwt)
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("Bearer")
                 .bearerFormat("JWT")
         );
+        Server server = new Server();
+        server.setUrl("https://d3eoy4ym225l85.cloudfront.net");
+        server.setDescription("CloudFront 배포 서버");
+
         return new OpenAPI()
-                //.components(new Components())
+                .servers(Collections.singletonList(server))
                 .info(apiInfo())
-                //.addSecurityItem(securityRequirement)
                 .components(components);
     }
 
