@@ -47,7 +47,7 @@ public class BookClubQueryRepository {
         }
         if (!StringUtils.isNullOrEmpty(searchKeyword)) {
             builder.and(bookClubEntity.title.contains(searchKeyword)
-                    .or(bookClubEntity.description.contains(searchKeyword)));
+                    .or(bookClubEntity.town.contains(searchKeyword)));
         }
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
