@@ -25,12 +25,24 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final AuthenticationEntryPoint authenticationEntryPoint;
 
+    private static final String[] SWAGGER_WHITELIST = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/api-docs/**",
+    };
+
     @Bean
     public SecurityFilterChain authSecurityFilterChain(HttpSecurity http) throws Exception {
         http.
                 csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/v1/auths/signup/**", "/api/v1/auths/signin/**", "/api/v1/auths/refresh/**")
+                        req.requestMatchers("/api/v1/auths/signup/**",
+                                        "/api/v1/auths/signin/**",
+                                        "/api/v1/auths/refresh/**",
+                                        "/api/v1/auths/signout/**",
+                                        "/error/**")
+                                .permitAll()
+                                .requestMatchers(SWAGGER_WHITELIST)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
