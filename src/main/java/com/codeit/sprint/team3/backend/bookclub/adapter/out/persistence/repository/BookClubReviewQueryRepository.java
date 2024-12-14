@@ -4,6 +4,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeCon
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +38,17 @@ public class BookClubReviewQueryRepository {
             case RATE_DESC -> bookClubReviewEntity.rating.desc();
             default -> throw new IllegalTypeConversionException(order.name());
         };
+    }
+
+    public double getBookClubReviewAverageRating(Long bookClubId) {
+        Double rate = jpaQueryFactory.select(Expressions.template(Double.class,
+                                "ROUND(AVG({0}), 1)",
+                                bookClubReviewEntity.rating
+                        )
+                )
+                .from(bookClubReviewEntity)
+                .where(bookClubReviewEntity.bookClubId.eq(bookClubId))
+                .fetchOne();
+        return rate == null ? 0 : rate;
     }
 }

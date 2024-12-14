@@ -6,6 +6,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBoo
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubReviewResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.ScoredBookClubReview;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,15 +44,15 @@ public class BookClubReviewController {
             @RequestParam(defaultValue = "DESC") String order
     ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId, pageable, BookClubReviewListOrderType.from(order));
+        ScoredBookClubReview bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId, pageable, BookClubReviewListOrderType.from(order));
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookClubReview(@PathVariable Long bookClubId, @PathVariable Long id) {
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteBookClubReview(@PathVariable Long bookClubId, @PathVariable Long reviewId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
-        bookClubReviewUseCase.deleteBookClubReview(bookClubId, userId, id);
+        bookClubReviewUseCase.deleteBookClubReview(bookClubId, userId, reviewId);
         return ResponseEntity.noContent().build();
     }
 }
