@@ -1,12 +1,14 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
 import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
+import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubReviewListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubReviewRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubReviewResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,8 +36,14 @@ public class BookClubReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<BookClubReviewResponses> getBookClubReviewsById(@PathVariable Long bookClubId) {
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId);
+    public ResponseEntity<BookClubReviewResponses> getBookClubReviewsById(
+            @PathVariable Long bookClubId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "DESC") String order
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId, pageable, BookClubReviewListOrderType.from(order));
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 

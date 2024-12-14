@@ -5,7 +5,9 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.out.BookClubRev
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,9 @@ public class BookClubReviewService implements BookClubReviewUseCase {
     }
 
     @Override
-    public List<BookClubReview> getBookClubReviewsById(Long bookClubId) {
+    public List<BookClubReview> getBookClubReviewsById(Long bookClubId, Pageable pageable, OrderType order) {
         BookClub bookClub = bookClubUseCase.getById(bookClubId);
-        return bookClubReviewPort.findAllByBookClubId(bookClub.getId());
+        return bookClubReviewPort.findAllByBookClubId(bookClub.getId(), pageable, order);
     }
 
     @Override

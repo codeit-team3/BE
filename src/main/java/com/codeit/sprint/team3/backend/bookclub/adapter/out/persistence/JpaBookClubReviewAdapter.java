@@ -6,7 +6,9 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.reposito
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewQueryRepository;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.BookClubReviewPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,8 +25,8 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     }
 
     @Override
-    public List<BookClubReview> findAllByBookClubId(Long bookClubId) {
-        return bookClubReviewQueryRepository.findAllByBookClubId(bookClubId)
+    public List<BookClubReview> findAllByBookClubId(Long bookClubId, Pageable pageable, OrderType order) {
+        return bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order)
                 .stream()
                 .map(BookClubReviewEntity::toDomain)
                 .toList();
