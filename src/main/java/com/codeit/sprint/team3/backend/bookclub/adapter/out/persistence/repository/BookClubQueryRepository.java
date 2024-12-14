@@ -27,7 +27,7 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword) {
+    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
@@ -53,7 +53,7 @@ public class BookClubQueryRepository {
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId))
-                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubEntity.createdBy.eq(bookClubLikeEntity.userId)))
+                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .where(
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
                         filterEnum(meetingType, bookClubEntity.meetingType),
