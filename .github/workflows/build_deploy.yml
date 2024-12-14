@@ -42,13 +42,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{env.NAME}}/${{env.REPO}}:latest
-#
-#  deploy:
-#    needs: build
-#    name: Deploy
-#    runs-on: [ self-hosted, label-development ]
-#    steps:
-#
-#      - name: deploy run
-#        run: |
-#          sudo sh /home/ec2-user/run.sh
