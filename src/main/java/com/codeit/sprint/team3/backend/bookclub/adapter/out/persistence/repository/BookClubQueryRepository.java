@@ -87,7 +87,6 @@ public class BookClubQueryRepository {
                 bookClubEntity.targetDate,
                 bookClubEntity.endDate,
                 bookClubEntity.memberLimit,
-                bookClubEntity.city,
                 bookClubEntity.town,
                 bookClubEntity.createdBy,
                 bookClubEntity.createdAt,

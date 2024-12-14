@@ -13,7 +13,6 @@ public record BookClubResponse(
         String targetDate,
         String endDate,
         int memberLimit,
-        String city,
         String town,
         int memberCount,
         boolean isLiked
@@ -28,7 +27,6 @@ public record BookClubResponse(
                 bookClub.getTargetDate().toString(),
                 bookClub.getEndDate().toString(),
                 bookClub.getMemberLimit(),
-                bookClub.getCity(),
                 bookClub.getTown(),
                 bookClub.getMemberCount(),
                 bookClub.isLiked()

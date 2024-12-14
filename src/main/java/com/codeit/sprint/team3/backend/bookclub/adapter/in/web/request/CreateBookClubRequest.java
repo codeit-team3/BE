@@ -27,10 +27,9 @@ public record CreateBookClubRequest(
         @Max(value = 100, message = "모집 정원은 100명을 넘을 수 없습니다.")
         @Positive(message = "모집 정원은 0보다 커야합니다.")
         Integer memberLimit,
-        String city,
         String town
 ) {
     public BookClub toDomain() {
-        return BookClub.of(title, description, MeetingType.getCommandType(meetingType), BookClubType.getCommandType(bookClubType), targetDate, endDate, memberLimit, city, town);
+        return BookClub.of(title, description, MeetingType.getCommandType(meetingType), BookClubType.getCommandType(bookClubType), targetDate, endDate, memberLimit, town);
     }
 }
