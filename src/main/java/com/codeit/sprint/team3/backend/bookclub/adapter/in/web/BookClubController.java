@@ -35,7 +35,7 @@ public class BookClubController {
     @SneakyThrows
     @PostMapping
     public ResponseEntity<Void> createBookClub(
-            @RequestPart MultipartFile image,
+            @RequestPart(required = false) MultipartFile image,
             @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -112,6 +112,20 @@ public class BookClubController {
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        return ResponseEntity.ok()
+                .body(BookClubResponses.from(bookClubs));
+    }
+
+    @GetMapping("/my-joined")
+    public ResponseEntity<BookClubResponses> findMyJoinedBookClubs(
+            @RequestParam(defaultValue = "DESC") String order,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
+        List<BookClub> bookClubs = bookClubUseCase.findMyJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
