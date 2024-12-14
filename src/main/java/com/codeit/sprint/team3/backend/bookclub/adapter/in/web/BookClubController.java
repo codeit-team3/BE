@@ -9,6 +9,7 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
@@ -61,14 +62,14 @@ public class BookClubController {
             @RequestParam(defaultValue = "ALL") String bookClubType,
             @RequestParam(defaultValue = "ALL") String meetingType,
             @RequestParam(defaultValue = "DESC") String order,
-            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             String searchKeyword,
             Integer memberLimit,
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));

@@ -51,7 +51,8 @@ public class BookClubEntity {
             String town,
             Long createdBy,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Boolean isInactive
     ) {
         this.title = title;
         this.description = description;
@@ -65,6 +66,7 @@ public class BookClubEntity {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.isInactive = isInactive;
     }
 
     public static BookClubEntity of(BookClub bookClub, Long userId) {
@@ -81,6 +83,7 @@ public class BookClubEntity {
                 .createdBy(userId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .isInactive(false)
                 .build();
     }
 

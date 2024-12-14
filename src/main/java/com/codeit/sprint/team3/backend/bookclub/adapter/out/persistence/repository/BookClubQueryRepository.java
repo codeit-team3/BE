@@ -45,10 +45,9 @@ public class BookClubQueryRepository {
         if (orderType == OrderType.END) {
             builder.and(bookClubEntity.endDate.goe(LocalDateTime.now()));
         }
-        BooleanExpression searchCondition = null;
         if (!StringUtils.isNullOrEmpty(searchKeyword)) {
-            searchCondition = bookClubEntity.title.contains(searchKeyword)
-                    .or(bookClubEntity.description.contains(searchKeyword));
+            builder.and(bookClubEntity.title.contains(searchKeyword)
+                    .or(bookClubEntity.description.contains(searchKeyword)));
         }
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
@@ -59,7 +58,8 @@ public class BookClubQueryRepository {
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
                         filterEnum(meetingType, bookClubEntity.meetingType),
                         bookClubEntity.isInactive.eq(false),
-                        builder)
+                        builder
+                )
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
                 .offset(pageable.getOffset())

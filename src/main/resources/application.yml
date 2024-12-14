@@ -40,7 +40,7 @@ logging:
     org.springframework.web.client: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.orm.jdbc.bind: trace
-    root: debug
+    root: info
 
 jwt:
   secret: 4e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8
