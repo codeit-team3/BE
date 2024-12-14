@@ -52,7 +52,7 @@ public class BookClubQueryRepository {
 
         return jpaQueryFactory.select(getBookClubDtoProjection())
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .where(
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
@@ -105,5 +105,18 @@ public class BookClubQueryRepository {
             return null;
         }
         return enumPath.eq(enumValue);
+    }
+
+    public BookClubDto findBookClubBy(Long bookClubId, Long userId) {
+        return jpaQueryFactory.select(getBookClubDtoProjection())
+                .from(bookClubEntity)
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
+                .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .where(
+                        bookClubEntity.isInactive.eq(false),
+                        bookClubEntity.id.eq(bookClubId)
+                )
+                .groupBy(bookClubEntity.id)
+                .fetchOne();
     }
 }

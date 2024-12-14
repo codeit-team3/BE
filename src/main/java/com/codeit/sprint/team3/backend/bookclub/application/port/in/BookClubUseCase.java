@@ -17,4 +17,6 @@ public interface BookClubUseCase {
     BookClub getById(Long bookClubId);
 
     void deleteBookClub(Long bookClubId, Long userId);
+
+    BookClub findBookClubById(Long bookClubId, Long userId);
 }
