@@ -66,7 +66,7 @@ public class BookClubReviewController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getMyReviews(userId, pageable, BookClubReviewListOrderType.from(order));
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getMyReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order));
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 }
