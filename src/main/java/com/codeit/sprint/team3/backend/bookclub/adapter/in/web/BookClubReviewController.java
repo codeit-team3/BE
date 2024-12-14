@@ -4,6 +4,7 @@ import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCa
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubReviewListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubReviewRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubReviewResponses;
+import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.ScoredBookClubReviewResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import com.codeit.sprint.team3.backend.bookclub.domain.ScoredBookClubReview;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/book-clubs/{bookClubId}/reviews")
+@RequestMapping("/api/v1/book-clubs")
 @RequiredArgsConstructor
 public class BookClubReviewController {
     private final BookClubReviewUseCase bookClubReviewUseCase;
     private final UserProfileUseCase userProfileUseCase;
 
-    @PostMapping
+    @PostMapping("/{bookClubId}/reviews")
     public ResponseEntity<Void> createBookClubReview(
             @PathVariable Long bookClubId,
             @Valid @RequestBody CreateBookClubReviewRequest createBookClubReviewRequest
@@ -36,8 +37,8 @@ public class BookClubReviewController {
                 .build();
     }
 
-    @GetMapping
-    public ResponseEntity<BookClubReviewResponses> getBookClubReviewsById(
+    @GetMapping("/{bookClubId}/reviews")
+    public ResponseEntity<ScoredBookClubReviewResponses> getBookClubReviewsById(
             @PathVariable Long bookClubId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -45,14 +46,27 @@ public class BookClubReviewController {
     ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         ScoredBookClubReview bookClubReviews = bookClubReviewUseCase.getBookClubReviewsById(bookClubId, pageable, BookClubReviewListOrderType.from(order));
-        return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
+        return ResponseEntity.ok(ScoredBookClubReviewResponses.from(bookClubReviews));
     }
 
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/{bookClubId}/reviews/{reviewId}")
     public ResponseEntity<Void> deleteBookClubReview(@PathVariable Long bookClubId, @PathVariable Long reviewId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         bookClubReviewUseCase.deleteBookClubReview(bookClubId, userId, reviewId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/my-reviews")
+    public ResponseEntity<BookClubReviewResponses> getMyReviews(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "DESC") String order
+    ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getMyReviews(userId, pageable, BookClubReviewListOrderType.from(order));
+        return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 }

@@ -1,8 +1,8 @@
 package com.codeit.sprint.team3.backend.bookclub.application.service;
 
+import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.BookClubReviewPort;
-import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
@@ -40,5 +40,10 @@ public class BookClubReviewService implements BookClubReviewUseCase {
     public void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId) {
         BookClub bookClub = bookClubUseCase.getById(bookClubId);
         bookClubReviewPort.deleteBookClubReview(bookClub.getId(), userId, bookClubReviewId);
+    }
+
+    @Override
+    public List<BookClubReview> getMyReviews(Long userId, Pageable pageable, OrderType orderType) {
+        return bookClubReviewPort.findMyReviews(userId, pageable, orderType);
     }
 }
