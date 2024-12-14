@@ -1,12 +1,12 @@
-name: codeit
+name: codeit-CICD
 
 on:
   push:
     branches: [ dev ]
 
 env:
-  NAME: hyuntaepark
-  REPO: codeit
+  NAME: codeit
+  REPO: bookco
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_TOKEN}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
 
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -42,13 +42,13 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{env.NAME}}/${{env.REPO}}:latest
-
-  deploy:
-    needs: build
-    name: Deploy
-    runs-on: [ self-hosted, label-development ]
-    steps:
-
-      - name: deploy run
-        run: |
-          sudo sh /home/ec2-user/run.sh
+#
+#  deploy:
+#    needs: build
+#    name: Deploy
+#    runs-on: [ self-hosted, label-development ]
+#    steps:
+#
+#      - name: deploy run
+#        run: |
+#          sudo sh /home/ec2-user/run.sh
