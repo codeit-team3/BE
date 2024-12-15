@@ -42,7 +42,7 @@ logging:
 
 jwt:
   secret: 4e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8e1c9c6b3b9f82e1c1f8e1c8f8e1c1f8
-  access_expiration: 900000
+  access_expiration: 86400000
   refresh_expiration: 86400000
 
 springdoc:
