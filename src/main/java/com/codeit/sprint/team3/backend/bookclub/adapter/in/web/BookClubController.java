@@ -49,10 +49,6 @@ public class BookClubController {
     }
 
     private void validateImage(MultipartFile image) {
-        if (image.isEmpty()) {
-            return;
-        }
-        //TODO 이미지 형식 제한 추가하기~
         if (!"jpg".equals(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
             throw new InvalidRequest("image", "이미지는 jpg 형식이어야 합니다.");
         }

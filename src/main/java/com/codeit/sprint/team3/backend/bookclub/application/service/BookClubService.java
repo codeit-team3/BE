@@ -22,6 +22,7 @@ public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
     private final QueryBookClubPort queryBookClubPort;
     private final CommandBookClubMemberPort commandBookClubMemberPort;
+    private final StorageService storageService;
 
     @Override
     @Transactional
