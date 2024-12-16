@@ -48,7 +48,7 @@ public class BookClubController {
 
         validateImage(image);
         //TODO 이미지 저장
-        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId);
+        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId, image);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }

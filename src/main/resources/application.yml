@@ -63,3 +63,15 @@ springdoc:
   model-and-view-allowed: true
   paths-to-match:
     - /api/v1/**
+
+# AWS S3
+cloud:
+  aws:
+    s3:
+      bucket: ${{secrets.AWS_S3_BUCKET}}
+    region: 'ap-northeast-2'
+    stack:
+      auto: false
+    credentials:
+      access-key: ${{secrets.AWS_ACCESS_KEY}}
+      secret-key: ${{secrets.AWS_SECRET_KEY}}

@@ -6,10 +6,12 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBook
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.*;
+import com.codeit.sprint.team3.backend.common.application.port.out.FileUploadPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,16 +24,18 @@ public class BookClubService implements BookClubUseCase {
     private final CommandBookClubPort commandBookClubPort;
     private final QueryBookClubPort queryBookClubPort;
     private final CommandBookClubMemberPort commandBookClubMemberPort;
+    private final FileUploadPort fileUploadPort;
 
     @Override
     @Transactional
-    public void createBookClub(BookClub bookClub, Long userId) {
+    public void createBookClub(BookClub bookClub, Long userId, MultipartFile file) {
         //book club creation logic
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
 
         //save the creator as a member
         commandBookClubMemberPort.save(BookClubMember.of(savedBookClub.getId(), userId));
 
+        fileUploadPort.uploadImageToS3(file, "bookclubs/" + savedBookClub.getId(), "image.jpg", "jpg");
         /**
          * TODO 채팅 구현되면 아래 로직 추가하기
          * 채팅방 생성
