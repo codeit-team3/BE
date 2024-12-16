@@ -43,8 +43,8 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     }
 
     @Override
-    public List<BookClubReview> findMyReviews(Long userId, Pageable pageable, OrderType orderType) {
-        return bookClubReviewQueryRepository.findMyReviews(userId, pageable, orderType)
+    public List<BookClubReview> findUserReviews(Long userId, Pageable pageable, OrderType orderType) {
+        return bookClubReviewQueryRepository.findUserReviews(userId, pageable, orderType)
                 .stream()
                 .map(BookClubReviewEntity::toDomain)
                 .toList();

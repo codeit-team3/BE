@@ -53,7 +53,7 @@ public class BookClubReviewQueryRepository {
         return rate == null ? 0 : rate;
     }
 
-    public List<BookClubReviewEntity> findMyReviews(Long userId, Pageable pageable, OrderType orderType) {
+    public List<BookClubReviewEntity> findUserReviews(Long userId, Pageable pageable, OrderType orderType) {
         return jpaQueryFactory.selectFrom(bookClubReviewEntity)
                 .where(
                         bookClubReviewEntity.userId.eq(userId),
