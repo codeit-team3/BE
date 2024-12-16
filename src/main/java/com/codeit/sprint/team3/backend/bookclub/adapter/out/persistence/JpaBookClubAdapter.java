@@ -61,16 +61,16 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
     }
 
     @Override
-    public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
-        return bookClubQueryRepository.findMyCreatedBookClubs(userId, orderType, pageable)
+    public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        return bookClubQueryRepository.findMyCreatedBookClubs(userId, orderType, pageable, includeInactive)
                 .stream()
                 .map(BookClubEntity::toModel)
                 .toList();
     }
 
     @Override
-    public List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
-        return bookClubQueryRepository.findUserJoinedBookClubs(userId, orderType, pageable)
+    public List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        return bookClubQueryRepository.findUserJoinedBookClubs(userId, orderType, pageable, includeInactive)
                 .stream()
                 .map(BookClubEntity::toModel)
                 .toList();

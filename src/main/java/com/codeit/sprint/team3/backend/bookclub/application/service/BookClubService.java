@@ -68,12 +68,12 @@ public class BookClubService implements BookClubUseCase {
     }
 
     @Override
-    public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
-        return queryBookClubPort.findMyCreatedBookClubs(userId, orderType, pageable);
+    public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        return queryBookClubPort.findMyCreatedBookClubs(userId, orderType, pageable, includeInactive);
     }
 
     @Override
-    public List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
-        return queryBookClubPort.findUserJoinedBookClubs(userId, orderType, pageable);
+    public List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        return queryBookClubPort.findUserJoinedBookClubs(userId, orderType, pageable, includeInactive);
     }
 }

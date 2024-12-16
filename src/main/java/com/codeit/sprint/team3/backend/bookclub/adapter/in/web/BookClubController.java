@@ -111,7 +111,7 @@ public class BookClubController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
@@ -125,7 +125,7 @@ public class BookClubController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
@@ -138,7 +138,7 @@ public class BookClubController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
@@ -151,7 +151,7 @@ public class BookClubController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
