@@ -137,7 +137,7 @@ public class BookClubQueryRepository {
                 .fetch();
     }
 
-    public List<BookClubEntity> findMyJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
+    public List<BookClubEntity> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
         return jpaQueryFactory.select(bookClubEntity)
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(bookClubMemberEntity.isInactive.eq(false)))

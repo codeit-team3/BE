@@ -43,7 +43,7 @@ public class BookClubReviewService implements BookClubReviewUseCase {
     }
 
     @Override
-    public List<BookClubReview> getMyReviews(Long userId, Pageable pageable, OrderType orderType) {
-        return bookClubReviewPort.findMyReviews(userId, pageable, orderType);
+    public List<BookClubReview> getUserReviews(Long userId, Pageable pageable, OrderType orderType) {
+        return bookClubReviewPort.findUserReviews(userId, pageable, orderType);
     }
 }

@@ -14,5 +14,5 @@ public interface BookClubReviewPort {
 
     void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId);
 
-    List<BookClubReview> findMyReviews(Long userId, Pageable pageable, OrderType orderType);
+    List<BookClubReview> findUserReviews(Long userId, Pageable pageable, OrderType orderType);
 }

@@ -14,5 +14,5 @@ public interface BookClubReviewUseCase {
 
     void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId);
 
-    List<BookClubReview> getMyReviews(Long userId, Pageable pageable, OrderType orderType);
+    List<BookClubReview> getUserReviews(Long userId, Pageable pageable, OrderType orderType);
 }
