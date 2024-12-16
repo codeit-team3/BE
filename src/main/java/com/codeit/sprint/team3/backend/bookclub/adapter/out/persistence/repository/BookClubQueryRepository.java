@@ -123,13 +123,16 @@ public class BookClubQueryRepository {
                 .fetchOne();
     }
 
-    public List<BookClubEntity> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
+    public List<BookClubEntity> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(bookClubEntity.createdBy.eq(userId));
+        if (!includeInactive) {
+            builder.and(bookClubEntity.isInactive.eq(false));
+        }
         return jpaQueryFactory.select(bookClubEntity)
                 .from(bookClubEntity)
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
-                .where(
-                        bookClubEntity.createdBy.eq(userId)
-                )
+                .where(builder)
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
                 .offset(pageable.getOffset())
@@ -137,10 +140,14 @@ public class BookClubQueryRepository {
                 .fetch();
     }
 
-    public List<BookClubEntity> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable) {
+    public List<BookClubEntity> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (!includeInactive) {
+            builder.and(bookClubMemberEntity.isInactive.eq(false));
+        }
         return jpaQueryFactory.select(bookClubEntity)
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(bookClubMemberEntity.isInactive.eq(false)))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(builder))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))

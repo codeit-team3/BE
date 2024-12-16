@@ -15,7 +15,8 @@ public record BookClubResponse(
         int memberLimit,
         String town,
         int memberCount,
-        boolean isLiked
+        boolean isLiked,
+        boolean isInactive
 ) {
     public static BookClubResponse from(BookClub bookClub) {
         return new BookClubResponse(
@@ -29,7 +30,8 @@ public record BookClubResponse(
                 bookClub.getMemberLimit(),
                 bookClub.getTown(),
                 bookClub.getMemberCount(),
-                bookClub.isLiked()
+                bookClub.isLiked(),
+                bookClub.isInactive()
         );
     }
 }

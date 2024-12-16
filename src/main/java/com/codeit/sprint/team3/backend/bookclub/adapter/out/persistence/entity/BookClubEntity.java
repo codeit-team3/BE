@@ -84,7 +84,7 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy);
+        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive);
     }
 
     public void delete() {
