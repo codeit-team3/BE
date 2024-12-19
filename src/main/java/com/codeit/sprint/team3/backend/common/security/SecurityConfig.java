@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,12 +45,16 @@ public class SecurityConfig {
                                         "/api/v1/auths/signin/**",
                                         "/api/v1/auths/refresh/**",
                                         "/api/v1/auths/signout/**",
-                                        "/error/**",
-                                "/api/v1/book-clubs",
-                                "/api/v1/book-clubs/{bookClubId}",
-                                "/api/v1/book-clubs/{bookClubId}/reviews")
+                                        "/error/**"
+                        )
                         .permitAll()
                         .requestMatchers(SWAGGER_WHITELIST)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/book-clubs",
+                                "/api/v1/book-clubs/{bookClubId}",
+                                "/api/v1/book-clubs/{bookClubId}/reviews"
+                        )
                         .permitAll()
                         .anyRequest()
                         .authenticated()
