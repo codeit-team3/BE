@@ -74,8 +74,9 @@ public class BookClubController {
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        /*String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();*/
+        Long userId = 1L;
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
         return ResponseEntity.ok()
@@ -94,8 +95,9 @@ public class BookClubController {
 
     @GetMapping("/{bookClubId}")
     public ResponseEntity<BookClubResponse> findBookClub(@PathVariable Long bookClubId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        /*String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userProfileUseCase.getUserByEmail(email).getId();*/
+        Long userId = 1L;
 
         BookClub bookClub = bookClubUseCase.findBookClubById(bookClubId, userId);
         return ResponseEntity.ok()

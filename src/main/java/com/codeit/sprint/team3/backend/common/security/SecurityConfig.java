@@ -39,17 +39,21 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/v1/auths/signup/**",
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers("/api/v1/auths/signup/**",
                                         "/api/v1/auths/signin/**",
                                         "/api/v1/auths/refresh/**",
                                         "/api/v1/auths/signout/**",
-                                        "/error/**")
-                                .permitAll()
-                                .requestMatchers(SWAGGER_WHITELIST)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                                        "/error/**",
+                                "/api/v1/book-clubs",
+                                "/api/v1/book-clubs/{bookClubId}",
+                                "/api/v1/book-clubs/{bookClubId}/reviews")
+                        .permitAll()
+                        .requestMatchers(SWAGGER_WHITELIST)
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
