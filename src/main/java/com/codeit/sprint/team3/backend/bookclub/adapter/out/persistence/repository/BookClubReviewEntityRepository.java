@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BookClubReviewEntityRepository extends JpaRepository<BookClubReviewEntity, Long> {
-    Optional<BookClubReviewEntity> getByIdAndBookClubIdAndUserIdAndIsInactiveFalse(Long id, Long bookClubId, Long userId);
+    Optional<BookClubReviewEntity> getByIdAndUserIdAndIsInactiveFalse(Long id, Long userId);
 }

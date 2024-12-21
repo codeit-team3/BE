@@ -29,6 +29,8 @@ import java.util.List;
 @RequestMapping("/api/v1/book-clubs")
 @RequiredArgsConstructor
 public class BookClubController {
+    private static final List<String> VALID_EXTENSIONS = List.of("jpg", "jpeg");
+
     private final BookClubUseCase bookClubUseCase;
     private final UserProfileUseCase userProfileUseCase;
 
@@ -49,8 +51,7 @@ public class BookClubController {
     }
 
     private void validateImage(MultipartFile image) {
-        //TODO 이미지 형식 제한 추가하기~
-        if (!"jpg".equals(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
+        if (VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
             throw new InvalidRequest("image", "이미지는 jpg 형식이어야 합니다.");
         }
         long size = image.getSize();

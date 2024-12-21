@@ -66,7 +66,7 @@ public class BookClubReviewController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order));
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order), true);
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 
@@ -78,7 +78,7 @@ public class BookClubReviewController {
             @RequestParam(defaultValue = "DESC") String order
     ) {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order));
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order), false);
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 }

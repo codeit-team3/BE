@@ -16,14 +16,16 @@ public class BookClub {
     private final LocalDateTime targetDate;
     private final LocalDateTime endDate;
     private final int memberLimit;
+    private final String city;
     private final String town;
+    private final String detailAddress;
     private final Long createdBy;
     private final boolean isInactive;
     private final int memberCount;
     private final boolean isLiked;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -32,14 +34,16 @@ public class BookClub {
         this.targetDate = targetDate;
         this.endDate = endDate;
         this.memberLimit = memberLimit;
+        this.city = city;
         this.town = town;
+        this.detailAddress = detailAddress;
         this.createdBy = createdBy;
         this.memberCount = memberCount;
         this.isInactive = isInactive;
         this.isLiked = isLiked;
     }
 
-    public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town) {
+    public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress) {
         return BookClub.builder()
                 .title(title)
                 .description(description)

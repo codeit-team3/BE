@@ -1,5 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence;
 
+import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserEntity;
+import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubReviewNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewEntityRepository;
@@ -13,12 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     private final BookClubReviewEntityRepository bookClubReviewRepository;
     private final BookClubReviewQueryRepository bookClubReviewQueryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void saveBookClubReview(BookClubReview bookClubReview) {
@@ -28,25 +33,37 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     @Override
     public ScoredBookClubReview findAllByBookClubId(Long bookClubId, Pageable pageable, OrderType order) {
         double averageRating = bookClubReviewQueryRepository.getBookClubReviewAverageRating(bookClubId);
-        List<BookClubReview> bookClubReviews = bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order)
+        List<BookClubReviewEntity> bookClubReviewEntities = bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order);
+        Map<Long, UserEntity> userIdToUserEntity = userRepository.findAllById(extractUserIds(bookClubReviewEntities))
                 .stream()
-                .map(BookClubReviewEntity::toDomain)
+                .collect(Collectors.toMap(UserEntity::getId, user -> user));
+        List<BookClubReview> bookClubReviews = bookClubReviewEntities.stream()
+                .map(bookClubReviewEntity -> bookClubReviewEntity.toDomain(userIdToUserEntity.get(bookClubReviewEntity.getUserId())))
                 .toList();
         return ScoredBookClubReview.of(averageRating, bookClubReviews);
     }
 
     @Override
     public void deleteBookClubReview(Long bookClubId, Long userId, Long bookClubReviewId) {
-        BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndBookClubIdAndUserIdAndIsInactiveFalse(bookClubId, bookClubReviewId, userId)
+        BookClubReviewEntity bookClubReviewEntity = bookClubReviewRepository.getByIdAndUserIdAndIsInactiveFalse(bookClubReviewId, userId)
                 .orElseThrow(BookClubReviewNotExistException::new);
         bookClubReviewEntity.inactivate();
     }
 
     @Override
-    public List<BookClubReview> findUserReviews(Long userId, Pageable pageable, OrderType orderType) {
-        return bookClubReviewQueryRepository.findUserReviews(userId, pageable, orderType)
+    public List<BookClubReview> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
+        List<BookClubReviewEntity> bookClubReviewEntities = bookClubReviewQueryRepository.findUserReviews(userId, pageable, orderType, includeInactive);
+        Map<Long, UserEntity> userIdToUserEntity = userRepository.findAllById(extractUserIds(bookClubReviewEntities))
                 .stream()
-                .map(BookClubReviewEntity::toDomain)
+                .collect(Collectors.toMap(UserEntity::getId, user -> user));
+        return bookClubReviewEntities.stream()
+                .map(bookClubReviewEntity -> bookClubReviewEntity.toDomain(userIdToUserEntity.get(bookClubReviewEntity.getUserId())))
+                .toList();
+    }
+
+    private static List<Long> extractUserIds(List<BookClubReviewEntity> bookClubReviewEntities) {
+        return bookClubReviewEntities.stream()
+                .map(BookClubReviewEntity::getUserId)
                 .toList();
     }
 }
