@@ -52,7 +52,7 @@ public class BookClubController {
 
     private void validateImage(MultipartFile image) {
         if (VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
-            throw new InvalidRequest("image", "이미지는 jpg 형식이어야 합니다.");
+            throw new InvalidRequest("image", String.format("이미지는 %s 형식이어야 합니다.", String.join(", ", VALID_EXTENSIONS)));
         }
         long size = image.getSize();
         if (size > 1024 * 1024 * 10) {
@@ -72,8 +72,7 @@ public class BookClubController {
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 1L;
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
         return ResponseEntity.ok()
