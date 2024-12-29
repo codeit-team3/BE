@@ -76,8 +76,13 @@ public class SecurityConfig {
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer configureH2ConsoleEnable() {
         return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console())
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                .requestMatchers(PathRequest.toH2Console());
+    }
+
+    @Bean
+    public WebSecurityCustomizer configureStaticResources() {
+        return web -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스는 항상 무시
     }
 
     @Bean
