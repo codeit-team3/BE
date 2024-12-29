@@ -41,11 +41,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/v1/auths/signup/**",
-                                        "/api/v1/auths/signin/**",
-                                        "/api/v1/auths/refresh/**",
-                                        "/api/v1/auths/signout/**",
-                                        "/error/**"
+                        .requestMatchers(
+                                "/api/v1/auths/signup/**",
+                                "/api/v1/auths/signin/**",
+                                "/api/v1/auths/refresh/**",
+                                "/api/v1/auths/signout/**",
+                                "/error/**",
+                                "/ws/**",
+                                "/index.html"
                         )
                         .permitAll()
                         .requestMatchers(SWAGGER_WHITELIST)
@@ -73,7 +76,8 @@ public class SecurityConfig {
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer configureH2ConsoleEnable() {
         return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
+                .requestMatchers(PathRequest.toH2Console())
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Bean

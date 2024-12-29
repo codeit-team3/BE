@@ -12,12 +12,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    //private final JwtWebSocketInterceptor jwtWebSocketInterceptor;
+    private final JwtWebSocketInterceptor jwtWebSocketInterceptor;
 
     @Override //STOMP 엔드포인트 설정
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                //.addInterceptors(jwtWebSocketInterceptor) //인터셉터를 통한 로그인 사용자 식별가능
+                .addInterceptors(jwtWebSocketInterceptor) // /ws 경로에 한하여 인터셉터 추가
                 .setAllowedOriginPatterns("*").withSockJS();
     }
 
