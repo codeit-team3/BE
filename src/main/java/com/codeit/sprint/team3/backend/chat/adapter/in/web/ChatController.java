@@ -46,7 +46,6 @@ public class ChatController {
 
         messagingTemplate.convertAndSend(destination, chatMessage);
         saveChatMessageUseCase.save(chatMessage);
-        printChatMessage(chatMessage);
     }
 
     @MessageMapping("/group-chat/getHistory")
@@ -54,19 +53,7 @@ public class ChatController {
             @Header(name = "simpSessionAttributes") Map<String, Object> sessionAttributes
     ) {
         User user = (User) sessionAttributes.get("user");
-
-    }
-
-    private void printChatMessage(ChatMessage chatMessage) {
-        StringBuilder sb = new StringBuilder("ChatMessage").append("\n")
-                .append("User Id : ").append(chatMessage.getUserId()).append("\n")
-                .append("User nickname : ").append(chatMessage.getUserNickname()).append("\n")
-                .append("Date : ").append(chatMessage.getDate()).append("\n")
-                .append("BookClub Id : ").append(chatMessage.getBookClubId()).append("\n")
-                .append("Type : ").append(chatMessage.getType()).append("\n")
-                .append("Content : ").append(chatMessage.getContent()).append("\n");
-
-        System.out.println(sb.toString());
+        //TODO 히스토리 구현
     }
 
 }
