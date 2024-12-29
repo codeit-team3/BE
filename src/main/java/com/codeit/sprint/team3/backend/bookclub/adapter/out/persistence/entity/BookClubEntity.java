@@ -27,7 +27,9 @@ public class BookClubEntity {
     private LocalDateTime targetDate; // 모임 날짜
     private LocalDateTime endDate; // 모임 마감 날짜
     private int memberLimit;
+    private String city;
     private String town;
+    private String detailAddress;
     private Long createdBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -46,7 +48,9 @@ public class BookClubEntity {
             LocalDateTime targetDate,
             LocalDateTime endDate,
             int memberLimit,
+            String city,
             String town,
+            String detailAddress,
             Long createdBy,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
@@ -59,7 +63,9 @@ public class BookClubEntity {
         this.targetDate = targetDate;
         this.endDate = endDate;
         this.memberLimit = memberLimit;
+        this.city = city;
         this.town = town;
+        this.detailAddress = detailAddress;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -84,7 +90,7 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy);
+        return BookClub.of(id, description, title, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive);
     }
 
     public void delete() {

@@ -3,6 +3,7 @@ package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.reposit
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeConversionException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -53,12 +54,14 @@ public class BookClubReviewQueryRepository {
         return rate == null ? 0 : rate;
     }
 
-    public List<BookClubReviewEntity> findMyReviews(Long userId, Pageable pageable, OrderType orderType) {
+    public List<BookClubReviewEntity> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder()
+                .and(bookClubReviewEntity.userId.eq(userId));
+        if (!includeInactive) {
+            booleanBuilder.and(bookClubReviewEntity.isInactive.isFalse());
+        }
         return jpaQueryFactory.selectFrom(bookClubReviewEntity)
-                .where(
-                        bookClubReviewEntity.userId.eq(userId),
-                        bookClubReviewEntity.isInactive.isFalse()
-                )
+                .where(booleanBuilder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getDesc(orderType))

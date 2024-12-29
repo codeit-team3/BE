@@ -29,6 +29,8 @@ import java.util.List;
 @RequestMapping("/api/v1/book-clubs")
 @RequiredArgsConstructor
 public class BookClubController {
+    private static final List<String> VALID_EXTENSIONS = List.of("jpg", "jpeg");
+
     private final BookClubUseCase bookClubUseCase;
     private final UserProfileUseCase userProfileUseCase;
 
@@ -49,12 +51,8 @@ public class BookClubController {
     }
 
     private void validateImage(MultipartFile image) {
-        if (image.isEmpty()) {
-            return;
-        }
-        //TODO 이미지 형식 제한 추가하기~
-        if (!"jpg".equals(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
-            throw new InvalidRequest("image", "이미지는 jpg 형식이어야 합니다.");
+        if (VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
+            throw new InvalidRequest("image", String.format("이미지는 %s 형식이어야 합니다.", String.join(", ", VALID_EXTENSIONS)));
         }
         long size = image.getSize();
         if (size > 1024 * 1024 * 10) {
@@ -74,8 +72,6 @@ public class BookClubController {
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        /*String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();*/
         Long userId = 1L;
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimit, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
@@ -112,8 +108,8 @@ public class BookClubController {
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
-        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
@@ -126,8 +122,34 @@ public class BookClubController {
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = userProfileUseCase.getUserByEmail(email).getId();
-        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable);
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
+        return ResponseEntity.ok()
+                .body(BookClubResponses.from(bookClubs));
+    }
+
+    @GetMapping("/user/{userId}/created")
+    public ResponseEntity<BookClubResponses> findUserCreatedBookClubs(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "DESC") String order,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
+        return ResponseEntity.ok()
+                .body(BookClubResponses.from(bookClubs));
+    }
+
+    @GetMapping("/user/{userId}/joined")
+    public ResponseEntity<BookClubResponses> findUserJoinedBookClubs(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "DESC") String order,
+            @RequestParam(defaultValue = "1") @Min(1) Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
