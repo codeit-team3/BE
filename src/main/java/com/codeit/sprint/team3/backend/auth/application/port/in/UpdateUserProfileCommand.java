@@ -11,9 +11,9 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class UpdateUserProfileCommand {
-    @NotNull(message = "닉네임은 null일 수 없습니다.")
     private String nickname;
 
-    @NotNull(message = "이미지는 null일 수 없습니다.")
     private String image;
+
+    private String description;
 }

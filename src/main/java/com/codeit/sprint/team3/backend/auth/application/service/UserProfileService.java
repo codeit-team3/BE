@@ -9,9 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,15 +26,7 @@ public class UserProfileService implements UserProfileUseCase {
     public User updateUserProfile(String email, UpdateUserProfileCommand command) {
         User user = loadUserPort.loadUserByEmail(email);
 
-        String nickname = command.getNickname();
-        String image = command.getImage();
-        if(nickname != null) {
-            user.setNickname(nickname);
-        }
-        if(image != null) {
-            user.setImage(image);
-        }
-        user.setUpdatedAt(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+        user.update(command);
 
         updateUserPort.update(user);
         return user;

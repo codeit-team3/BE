@@ -32,7 +32,7 @@ public class UserProfileController {
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다. 헤더에 액세스 토큰을 포함해야합니다.")
     @SecurityRequirement(name = "JWT")
     public ResponseEntity<UserProfileDto> updateUser(
-            @RequestBody @Valid UpdateUserProfileCommand command
+            @RequestBody UpdateUserProfileCommand command
     ) {
         validateCommand(command);
 
@@ -42,8 +42,8 @@ public class UserProfileController {
     }
 
     private void validateCommand(UpdateUserProfileCommand command) {
-        if (isBlank(command.getNickname()) && isBlank(command.getImage())) {
-            throw new IllegalArgumentException("닉네임과 이미지는 모두 공백일 수 없습니다.");
+        if (isBlank(command.getNickname()) && isBlank(command.getImage()) && isBlank(command.getDescription())) {
+            throw new IllegalArgumentException("username, image, description 모두 공백일 수 없습니다.");
         }
     }
 
