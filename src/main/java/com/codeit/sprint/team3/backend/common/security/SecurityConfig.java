@@ -41,11 +41,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/v1/auths/signup/**",
-                                        "/api/v1/auths/signin/**",
-                                        "/api/v1/auths/refresh/**",
-                                        "/api/v1/auths/signout/**",
-                                        "/error/**"
+                        .requestMatchers(
+                                "/api/v1/auths/signup/**",
+                                "/api/v1/auths/signin/**",
+                                "/api/v1/auths/refresh/**",
+                                "/api/v1/auths/signout/**",
+                                "/error/**",
+                                "/ws/**",
+                                "/index.html"
                         )
                         .permitAll()
                         .requestMatchers(SWAGGER_WHITELIST)
@@ -74,6 +77,12 @@ public class SecurityConfig {
     public WebSecurityCustomizer configureH2ConsoleEnable() {
         return web -> web.ignoring()
                 .requestMatchers(PathRequest.toH2Console());
+    }
+
+    @Bean
+    public WebSecurityCustomizer configureStaticResources() {
+        return web -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); // 정적 리소스는 항상 무시
     }
 
     @Bean

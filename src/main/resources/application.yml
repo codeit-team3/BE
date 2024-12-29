@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://mysql-codeit.ctcauaaqszve.ap-northeast-2.rds.amazonaws.com:3306/codeit
+    url: jdbc:mysql://mysql-codeit.ctcauaaqszve.ap-northeast-2.rds.amazonaws.com:3306/codeit?rewriteBatchedStatements=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     password: codeitteam3
