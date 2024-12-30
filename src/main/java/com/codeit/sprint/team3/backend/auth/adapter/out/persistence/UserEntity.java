@@ -104,4 +104,8 @@ public class UserEntity implements UserDetails {
     public void setUpdatedAt(ZonedDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

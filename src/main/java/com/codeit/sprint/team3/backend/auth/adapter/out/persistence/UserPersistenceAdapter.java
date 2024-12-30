@@ -31,7 +31,7 @@ public class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, U
                 passwordEncoder.encode(command.getPassword()),
                 "",
                 command.getNickname(),
-                command.getDescription()==null?"":command.getDescription(),
+                command.getDescription()==null ? "" : command.getDescription(),
                 createdAt,
                 createdAt,
                 Role.USER
@@ -47,6 +47,7 @@ public class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, U
 
         userEntity.setNickname(user.getNickname());
         userEntity.setImage(user.getImage());
+        userEntity.setDescription(user.getDescription());
         userEntity.setUpdatedAt(user.getUpdatedAt());
 
         userRepository.save(userEntity);
