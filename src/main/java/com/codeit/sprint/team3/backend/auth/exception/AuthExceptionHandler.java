@@ -57,7 +57,7 @@ public class AuthExceptionHandler {
     }
 
     @ExceptionHandler({IllegalArgumentException.class, UserNotFoundException.class})
-    public ResponseEntity<Map<String, String>> handleException(IllegalArgumentException ex) {
+    public ResponseEntity<Map<String, String>> handleException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 Map.of(
                         "message", ex.getMessage()

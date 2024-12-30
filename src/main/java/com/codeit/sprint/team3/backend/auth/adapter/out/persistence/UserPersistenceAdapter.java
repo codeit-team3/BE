@@ -59,7 +59,12 @@ public class UserPersistenceAdapter implements RegisterUserPort, LoadUserPort, U
 
     @Override
     public User loadUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email)).toDomain();
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("Email : " + email + " 값을 가진 사용자가 존재하지 않습니다.")).toDomain();
+    }
+
+    @Override
+    public User loadUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Id : " + id + " 값을 가진 사용자가 존재하지 않습니다.")).toDomain();
     }
 
     @Override

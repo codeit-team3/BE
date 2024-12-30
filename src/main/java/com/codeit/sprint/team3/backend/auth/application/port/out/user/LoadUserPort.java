@@ -10,6 +10,8 @@ public interface LoadUserPort {
 
     User loadUserByEmail(String email);
 
+    User loadUserById(Long id);
+
     //Spring Security 용
     Optional<UserDetails> loadUserDetailsByEmail(String email);
 }

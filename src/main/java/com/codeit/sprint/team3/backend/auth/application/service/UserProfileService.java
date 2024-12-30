@@ -23,6 +23,11 @@ public class UserProfileService implements UserProfileUseCase {
     }
 
     @Override
+    public User getUserById(Long userId) {
+        return loadUserPort.loadUserById(userId);
+    }
+
+    @Override
     public User updateUserProfile(String email, UpdateUserProfileCommand command) {
         User user = loadUserPort.loadUserByEmail(email);
 

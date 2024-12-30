@@ -28,6 +28,14 @@ public class UserProfileController {
         return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.getUserByEmail(userEmail)));
     }
 
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "타 유저 회원 정보 확인", description = "인증이 불필요한 경로입니다.")
+    public ResponseEntity<UserProfileDto> getUserById(
+            @PathVariable("userId") Long userId
+    ) {
+        return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.getUserById(userId)));
+    }
+
     @PostMapping("/user")
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다. 헤더에 액세스 토큰을 포함해야합니다.")
     @SecurityRequirement(name = "JWT")

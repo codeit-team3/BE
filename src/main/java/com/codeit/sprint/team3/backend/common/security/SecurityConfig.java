@@ -56,7 +56,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/book-clubs",
                                 "/api/v1/book-clubs/{bookClubId}",
-                                "/api/v1/book-clubs/{bookClubId}/reviews"
+                                "/api/v1/book-clubs/{bookClubId}/reviews",
+                                "api/v1/auths/user/{userId}"
                         )
                         .permitAll()
                         .anyRequest()

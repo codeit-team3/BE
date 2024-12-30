@@ -4,5 +4,6 @@ import com.codeit.sprint.team3.backend.auth.domain.model.User;
 
 public interface UserProfileUseCase {
     User getUserByEmail(String email);
+    User getUserById(Long userId);
     User updateUserProfile(String email, UpdateUserProfileCommand command);
 }
