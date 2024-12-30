@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/api/v1/auths/refresh/**",
                                 "/api/v1/auths/signout/**",
                                 "/error/**",
-                                "/ws/**",
+                                "/api/v1/ws/**",
                                 "/index.html"
                         )
                         .permitAll()

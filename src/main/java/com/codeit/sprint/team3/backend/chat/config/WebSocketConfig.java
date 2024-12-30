@@ -16,7 +16,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override //STOMP 엔드포인트 설정
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
+        registry.addEndpoint("/api/v1/ws")
                 .addInterceptors(jwtWebSocketInterceptor) // /ws 경로에 한하여 인터셉터 추가
                 .setAllowedOriginPatterns("*").withSockJS();
     }
