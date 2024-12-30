@@ -41,8 +41,8 @@ public class BookClubService implements BookClubUseCase {
     }
 
     @Override
-    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
-        return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate, orderType, pageable, searchKeyword, userId);
+    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
+        return queryBookClubPort.findBookClubsBy(bookClubType, meetingType, memberLimitMin, memberLimitMax, location, targetDate, orderType, pageable, searchKeyword, userId);
     }
 
     @Override

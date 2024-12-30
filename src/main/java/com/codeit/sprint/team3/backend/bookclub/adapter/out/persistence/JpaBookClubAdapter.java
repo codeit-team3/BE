@@ -38,8 +38,8 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
     }
 
     @Override
-    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
-        return bookClubQueryRepository.findBookClubsBy(bookClubType, meetingType, memberLimit, location, targetDate, orderType, pageable, searchKeyword, userId)
+    public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
+        return bookClubQueryRepository.findBookClubsBy(bookClubType, meetingType, memberLimitMin, memberLimitMax, location, targetDate, orderType, pageable, searchKeyword, userId)
                 .stream()
                 .map(BookClubDto::toModel)
                 .toList();

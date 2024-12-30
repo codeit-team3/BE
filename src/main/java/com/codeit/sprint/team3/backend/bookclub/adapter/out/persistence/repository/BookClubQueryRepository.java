@@ -28,14 +28,15 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimit, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
+    public List<BookClubDto> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (!StringUtils.isNullOrEmpty(location)) {
             builder.and(bookClubEntity.town.eq(location));
         }
-        if (memberLimit != null) {
-            builder.and(bookClubEntity.memberLimit.eq(memberLimit));
+        if (memberLimitMin != null && memberLimitMax != null) {
+            builder.and(bookClubEntity.memberLimit.goe(memberLimitMin));
+            builder.and(bookClubEntity.memberLimit.loe(memberLimitMax));
         }
         if (targetDate != null) {
             LocalDateTime nextDayStart = targetDate.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
