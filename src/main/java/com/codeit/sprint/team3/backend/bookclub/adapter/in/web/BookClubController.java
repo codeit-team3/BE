@@ -51,7 +51,7 @@ public class BookClubController {
     }
 
     private void validateImage(MultipartFile image) {
-        if (VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
+        if (!VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
             throw new InvalidRequest("image", String.format("이미지는 %s 형식이어야 합니다.", String.join(", ", VALID_EXTENSIONS)));
         }
         long size = image.getSize();
