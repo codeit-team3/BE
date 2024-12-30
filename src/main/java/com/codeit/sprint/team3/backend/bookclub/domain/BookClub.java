@@ -53,6 +53,8 @@ public class BookClub {
                 .endDate(endDate)
                 .memberLimit(memberLimit)
                 .town(town)
+                .city(city)
+                .detailAddress(detailAddress)
                 .build();
     }
 
