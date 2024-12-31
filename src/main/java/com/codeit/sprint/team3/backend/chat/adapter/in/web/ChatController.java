@@ -53,7 +53,7 @@ public class ChatController {
     }
 
     @MessageMapping("/group-chat/recent")
-    @SendToUser("/queue/chatHistory")
+    @SendToUser("/queue/recent")
     public List<ChatMessage> getRecentChats(
             @Header(name = "simpSessionAttributes") Map<String, Object> sessionAttributes
     ) {
