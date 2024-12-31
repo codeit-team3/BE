@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.chat.adapter.in.web;
 
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
+import com.codeit.sprint.team3.backend.chat.adapter.in.web.response.HistoryResponses;
 import com.codeit.sprint.team3.backend.chat.application.port.in.ChatHistoryUseCase;
 import com.codeit.sprint.team3.backend.chat.application.port.in.SaveChatMessageUseCase;
 import com.codeit.sprint.team3.backend.chat.domain.ChatMessage;
@@ -31,13 +32,13 @@ public class ChatController {
     @MessageMapping("/group-chat/{chatRoomId}/sendMessage")
     public void sendMessage(
             @Header(name = "simpSessionAttributes") Map<String, Object> sessionAttributes,
-            @DestinationVariable String chatRoomId, //경로에서 추출
+            @DestinationVariable Long chatRoomId, //경로에서 추출
             @Payload ChatMessageReceived chatMessageReceived
     ) {
         User user = (User) sessionAttributes.get("user");
 
         ChatMessage chatMessage = new ChatMessage(
-                Long.parseLong(chatRoomId),
+                chatRoomId,
                 ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime(),
                 user.getId(),
                 user.getNickname(),
@@ -53,12 +54,23 @@ public class ChatController {
 
     @MessageMapping("/group-chat/recent")
     @SendToUser("/queue/chatHistory")
-    public List<ChatMessage> getHistory(
+    public List<ChatMessage> getRecentChats(
             @Header(name = "simpSessionAttributes") Map<String, Object> sessionAttributes
     ) {
         User user = (User) sessionAttributes.get("user");
 
         return chatHistoryUseCase.getRecentClubChatsForUser(user.getId());
+    }
+
+    @MessageMapping("/group-chat/history/{chatRoomId}")
+    @SendToUser("/queue/chatHistory")
+    public HistoryResponses getAllChatsByBookClubId(
+            @Header(name = "simpSessionAttributes") Map<String, Object> sessionAttributes,
+            @DestinationVariable Long chatRoomId //경로에서 추출
+    ) {
+        User user = (User) sessionAttributes.get("user");
+
+        return HistoryResponses.from(chatHistoryUseCase.getAllClubChats(user.getId(), chatRoomId));
     }
 
 }
