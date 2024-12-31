@@ -44,4 +44,15 @@ public class ChatMessageEntity {
         );
     }
 
+    public ChatMessage toDomain(){
+        return new ChatMessage(
+                bookClubId,
+                date,
+                userId,
+                userNickname,
+                type,
+                content
+        );
+    }
+
 }
