@@ -27,6 +27,7 @@ public class ChatHistoryService implements ChatHistoryUseCase {
                 .stream()
                 .map(BookClub::getId)
                 .map(loadChatPort::loadRecentChat)
+                .filter(m -> m.getBookClubId() != null)
                 .toList();
     }
 

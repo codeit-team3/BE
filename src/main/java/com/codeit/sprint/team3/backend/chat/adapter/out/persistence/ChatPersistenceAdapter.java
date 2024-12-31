@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,12 +28,18 @@ public class ChatPersistenceAdapter implements SaveChatMessagePort, LoadChatPort
     @Override
     @Transactional(readOnly = true)
     public ChatMessage loadRecentChat(Long bookClubId) {
-        return chatMessageRepository.findTopByBookClubIdOrderByDateDesc(bookClubId).toDomain();
+        return chatMessageRepository
+                .findTopByBookClubIdOrderByDateDesc(bookClubId)
+                .orElse(new ChatMessageEntity())
+                .toDomain();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ChatMessage> loadAllChat(Long bookClubId) {
-        return chatMessageRepository.findByBookClubId(bookClubId).stream().map(ChatMessageEntity::toDomain).toList();
+        return chatMessageRepository
+                .findByBookClubId(bookClubId)
+                .orElse(new ArrayList<>())
+                .stream().map(ChatMessageEntity::toDomain).toList();
     }
 }
