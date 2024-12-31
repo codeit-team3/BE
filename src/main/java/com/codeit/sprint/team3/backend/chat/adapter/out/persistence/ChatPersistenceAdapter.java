@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.chat.adapter.out.persistence;
 
-import com.codeit.sprint.team3.backend.chat.application.port.out.LoadRecentChatsPort;
+import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubEntity;
+import com.codeit.sprint.team3.backend.chat.application.port.out.LoadChatPort;
 import com.codeit.sprint.team3.backend.chat.application.port.out.SaveChatMessagePort;
 import com.codeit.sprint.team3.backend.chat.domain.ChatMessage;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ChatPersistenceAdapter implements SaveChatMessagePort, LoadRecentChatsPort {
+public class ChatPersistenceAdapter implements SaveChatMessagePort, LoadChatPort {
 
     private final ChatMessageRepository chatMessageRepository;
 
@@ -24,8 +25,14 @@ public class ChatPersistenceAdapter implements SaveChatMessagePort, LoadRecentCh
     }
 
     @Override
-    public ChatMessage loadRecentChats(Long bookClubId) {
-        System.out.println("Load recent chats - bookClubId: " + bookClubId);
+    @Transactional(readOnly = true)
+    public ChatMessage loadRecentChat(Long bookClubId) {
         return chatMessageRepository.findTopByBookClubIdOrderByDateDesc(bookClubId).toDomain();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ChatMessage> loadAllChat(Long bookClubId) {
+        return chatMessageRepository.findByBookClubId(bookClubId).stream().map(ChatMessageEntity::toDomain).toList();
     }
 }

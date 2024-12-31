@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ChatHistoryUseCase {
     List<ChatMessage> getRecentClubChatsForUser(Long userId);
+
+    List<ChatMessage> getAllClubChats(Long userId, Long bookClubId);
 }
