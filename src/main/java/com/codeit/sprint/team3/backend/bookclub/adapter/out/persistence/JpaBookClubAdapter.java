@@ -26,8 +26,8 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
     private final BookClubQueryRepository bookClubQueryRepository;
 
     @Override
-    public BookClub saveBookClub(BookClub bookClub, Long userId) {
-        return bookClubEntityRepository.save(BookClubEntity.of(bookClub, userId))
+    public BookClub saveBookClub(BookClub bookClub, Long userId, Boolean hasImage) {
+        return bookClubEntityRepository.save(BookClubEntity.of(bookClub, userId, hasImage))
                 .toModel();
     }
 

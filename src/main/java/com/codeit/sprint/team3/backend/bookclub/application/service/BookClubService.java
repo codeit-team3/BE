@@ -29,7 +29,7 @@ public class BookClubService implements BookClubUseCase {
     @Override
     @Transactional
     public void createBookClub(BookClub bookClub, Long userId, MultipartFile file) {
-        BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
+        BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId, file != null);
         commandBookClubMemberPort.save(BookClubMember.of(savedBookClub.getId(), userId));
 
         fileUploadPort.uploadImageToS3(file, "bookclubs/" + savedBookClub.getId(), "image.jpg", "jpg");

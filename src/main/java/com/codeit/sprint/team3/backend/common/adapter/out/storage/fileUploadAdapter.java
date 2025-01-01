@@ -23,6 +23,9 @@ public class fileUploadAdapter implements FileUploadPort {
     private final AmazonS3 amazonS3;
 
     public String uploadImageToS3(MultipartFile file, String path, String fileName, String extension) {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
         try {
             InputStream is = file.getInputStream();
             byte[] bytes = IOUtils.toByteArray(is);
