@@ -18,7 +18,10 @@ public class BookClubLikeController {
     @PostMapping
     public ResponseEntity<Void> likeBookClub(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubLikeUseCase.saveBookClubLike(id, userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
@@ -27,7 +30,10 @@ public class BookClubLikeController {
     @DeleteMapping
     public ResponseEntity<Void> unlikeBookClub(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubLikeUseCase.deleteBookClubLike(id, userId);
         return ResponseEntity.noContent()
                 .build();

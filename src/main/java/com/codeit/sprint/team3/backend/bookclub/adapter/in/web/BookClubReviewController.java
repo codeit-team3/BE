@@ -31,7 +31,10 @@ public class BookClubReviewController {
             @Valid @RequestBody CreateBookClubReviewRequest createBookClubReviewRequest
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubReviewUseCase.saveBookClubReview(bookClubId, userId, createBookClubReviewRequest.rating(), createBookClubReviewRequest.content());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
@@ -52,7 +55,10 @@ public class BookClubReviewController {
     @DeleteMapping("/{bookClubId}/reviews/{reviewId}")
     public ResponseEntity<Void> deleteBookClubReview(@PathVariable Long bookClubId, @PathVariable Long reviewId) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubReviewUseCase.deleteBookClubReview(bookClubId, userId, reviewId);
         return ResponseEntity.noContent().build();
     }
@@ -64,7 +70,10 @@ public class BookClubReviewController {
             @RequestParam(defaultValue = "DESC") String order
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order), true);
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));

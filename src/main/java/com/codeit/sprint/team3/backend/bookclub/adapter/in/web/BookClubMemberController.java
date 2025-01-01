@@ -17,7 +17,10 @@ public class BookClubMemberController {
     @PostMapping("/join")
     public ResponseEntity<Void> joinBookClub(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubMemberUseCase.joinBookClub(id, userId);
         return ResponseEntity.ok()
                 .build();
@@ -26,7 +29,10 @@ public class BookClubMemberController {
     @DeleteMapping("/leave")
     public ResponseEntity<Void> leaveBookClub(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         bookClubMemberUseCase.leaveBookClub(id, userId);
         return ResponseEntity.noContent()
                 .build();

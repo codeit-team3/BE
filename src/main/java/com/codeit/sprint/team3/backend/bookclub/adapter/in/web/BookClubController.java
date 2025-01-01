@@ -41,7 +41,10 @@ public class BookClubController {
             @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
 
         validateImage(image);
         //TODO 이미지 저장
@@ -83,7 +86,10 @@ public class BookClubController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
 
         bookClubUseCase.deleteBookClub(id, userId);
         return ResponseEntity.noContent()
@@ -92,9 +98,12 @@ public class BookClubController {
 
     @GetMapping("/{bookClubId}")
     public ResponseEntity<BookClubResponse> findBookClub(@PathVariable Long bookClubId) {
-        /*String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();*/
-        Long userId = 1L;
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
+
 
         BookClub bookClub = bookClubUseCase.findBookClubById(bookClubId, userId);
         return ResponseEntity.ok()
@@ -108,7 +117,10 @@ public class BookClubController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
@@ -122,7 +134,10 @@ public class BookClubController {
             @RequestParam(defaultValue = "10") Integer size
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userProfileUseCase.getUserByEmail(email).getId();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
