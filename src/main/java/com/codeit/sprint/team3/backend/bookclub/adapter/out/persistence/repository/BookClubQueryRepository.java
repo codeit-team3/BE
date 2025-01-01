@@ -148,7 +148,7 @@ public class BookClubQueryRepository {
         }
         return jpaQueryFactory.select(bookClubEntity)
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(builder))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(bookClubMemberEntity.isInactive.isFalse()).and(builder))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
