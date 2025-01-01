@@ -58,21 +58,6 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy) {
-        return BookClub.builder()
-                .id(id)
-                .title(title)
-                .description(description)
-                .meetingType(meetingType)
-                .bookClubType(bookClubType)
-                .targetDate(targetDate)
-                .endDate(endDate)
-                .memberLimit(memberLimit)
-                .town(town)
-                .createdBy(createdBy)
-                .build();
-    }
-
     public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, boolean isInactive) {
         return BookClub.builder()
                 .id(id)
