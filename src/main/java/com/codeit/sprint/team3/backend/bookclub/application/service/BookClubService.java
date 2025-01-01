@@ -29,19 +29,10 @@ public class BookClubService implements BookClubUseCase {
     @Override
     @Transactional
     public void createBookClub(BookClub bookClub, Long userId, MultipartFile file) {
-        //book club creation logic
         BookClub savedBookClub = commandBookClubPort.saveBookClub(bookClub, userId);
-
-        //save the creator as a member
         commandBookClubMemberPort.save(BookClubMember.of(savedBookClub.getId(), userId));
 
         fileUploadPort.uploadImageToS3(file, "bookclubs/" + savedBookClub.getId(), "image.jpg", "jpg");
-        /**
-         * TODO 채팅 구현되면 아래 로직 추가하기
-         * 채팅방 생성
-         * 채팅방에 멤버 추가(북클럽 생성자)
-         * 알림
-         */
     }
 
     @Override
