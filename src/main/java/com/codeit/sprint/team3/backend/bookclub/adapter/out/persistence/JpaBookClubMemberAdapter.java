@@ -29,7 +29,7 @@ public class JpaBookClubMemberAdapter implements CommandBookClubMemberPort {
 
     @Override
     public void leaveBookClub(Long bookClubId, Long userId) {
-        BookClubMemberEntity bookClubMemberEntity = bookClubMemberEntityRepository.findByBookClubIdAndUserId(bookClubId, userId);
+        BookClubMemberEntity bookClubMemberEntity = bookClubMemberEntityRepository.findByBookClubIdAndUserIdAndIsInactiveFalse(bookClubId, userId);
         bookClubMemberEntity.inactivate();
     }
 }

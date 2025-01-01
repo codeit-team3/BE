@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BookClubMemberEntityRepository extends JpaRepository<BookClubMemberEntity, Integer> {
     boolean existsByBookClubIdAndUserIdAndIsInactiveFalse(Long bookClubId, Long userId);
 
-    BookClubMemberEntity findByBookClubIdAndUserId(Long bookClubId, Long userId);
+    BookClubMemberEntity findByBookClubIdAndUserIdAndIsInactiveFalse(Long bookClubId, Long userId);
 }
