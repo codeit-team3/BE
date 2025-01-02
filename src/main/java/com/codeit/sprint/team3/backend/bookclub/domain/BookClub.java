@@ -23,9 +23,10 @@ public class BookClub {
     private final boolean isInactive;
     private final int memberCount;
     private final boolean isLiked;
+    private final String imageUrl;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
+    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress, Long createdBy, int memberCount, boolean isInactive, boolean isLiked, String imageUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,8 +42,10 @@ public class BookClub {
         this.memberCount = memberCount;
         this.isInactive = isInactive;
         this.isLiked = isLiked;
+        this.imageUrl = imageUrl;
     }
 
+    //Request
     public static BookClub of(String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress) {
         return BookClub.builder()
                 .title(title)
@@ -58,22 +61,8 @@ public class BookClub {
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy) {
-        return BookClub.builder()
-                .id(id)
-                .title(title)
-                .description(description)
-                .meetingType(meetingType)
-                .bookClubType(bookClubType)
-                .targetDate(targetDate)
-                .endDate(endDate)
-                .memberLimit(memberLimit)
-                .town(town)
-                .createdBy(createdBy)
-                .build();
-    }
-
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, boolean isInactive) {
+    //Entity to domain
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, boolean isInactive, String imageUrl) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -86,10 +75,12 @@ public class BookClub {
                 .town(town)
                 .createdBy(createdBy)
                 .isInactive(isInactive)
+                .imageUrl(imageUrl)
                 .build();
     }
 
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked) {
+    //Dto to domain
+    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked, String imageUrl) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -104,6 +95,7 @@ public class BookClub {
                 .memberCount(memberCount)
                 .isInactive(isInactive)
                 .isLiked(isLiked)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

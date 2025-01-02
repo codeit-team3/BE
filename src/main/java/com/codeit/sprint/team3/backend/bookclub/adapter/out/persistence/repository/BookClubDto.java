@@ -4,9 +4,11 @@ import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class BookClubDto {
     private final Long id;
     private final String title;
@@ -19,12 +21,13 @@ public class BookClubDto {
     private final String town;
     private final Long createdBy;
     private final LocalDateTime createdAt;
-    private final Integer memberCount;
     private final Boolean isInactive;
+    private final Boolean hasImage;
     private final Boolean isLiked;
+    private final Integer memberCount;
 
     @QueryProjection
-    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, LocalDateTime createdAt, Boolean isInactive, int memberCount, Boolean isLiked) {
+    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, LocalDateTime createdAt, Boolean isInactive, Boolean hasImage, int memberCount, Boolean isLiked) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -37,11 +40,12 @@ public class BookClubDto {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.isInactive = isInactive;
+        this.hasImage = hasImage;
         this.memberCount = memberCount;
         this.isLiked = isLiked;
     }
 
-    public BookClub toModel() {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, memberCount, isInactive, isLiked);
+    public BookClub toModel(String imageUrl) {
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, memberCount, isInactive, isLiked, imageUrl);
     }
 }

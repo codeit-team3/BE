@@ -47,13 +47,15 @@ public class BookClubController {
         }
 
         validateImage(image);
-        //TODO 이미지 저장
-        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId);
+        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId, image);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }
 
     private void validateImage(MultipartFile image) {
+        if (image == null) {
+            return;
+        }
         if (!VALID_EXTENSIONS.contains(StringUtils.getFilenameExtension(image.getOriginalFilename()))) {
             throw new InvalidRequest("image", String.format("이미지는 %s 형식이어야 합니다.", String.join(", ", VALID_EXTENSIONS)));
         }
