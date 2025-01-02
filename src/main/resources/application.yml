@@ -68,10 +68,10 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: ${{secrets.AWS_S3_BUCKET}}
+      bucket: ${secrets.AWS_S3_BUCKET}
     region: 'ap-northeast-2'
     stack:
       auto: false
     credentials:
-      access-key: ${{secrets.AWS_ACCESS_KEY}}
-      secret-key: ${{secrets.AWS_SECRET_KEY}}
+      access-key: ${secrets.AWS_ACCESS_KEY}
+      secret-key: ${secrets.AWS_SECRET_KEY}
