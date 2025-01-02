@@ -96,7 +96,11 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive);
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, "");
+    }
+
+    public BookClub toModel(String imageUrl) {
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, imageUrl);
     }
 
     public void delete() {

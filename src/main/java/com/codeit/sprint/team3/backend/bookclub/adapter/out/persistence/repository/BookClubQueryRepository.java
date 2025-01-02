@@ -96,6 +96,7 @@ public class BookClubQueryRepository {
                 bookClubEntity.createdBy,
                 bookClubEntity.createdAt,
                 bookClubEntity.isInactive,
+                bookClubEntity.hasImage,
                 bookClubMemberEntity.count().intValue().as("memberCount"),
                 Expressions.booleanTemplate("case when {0} > 0 then true else false end",
                                 bookClubLikeEntity.count())
