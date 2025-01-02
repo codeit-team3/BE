@@ -71,10 +71,10 @@ public class BookClubQueryRepository {
 
     private OrderSpecifier<?> getOrderSpecifiers(OrderType orderType) {
         if (orderType == OrderType.DESC) {
-            return bookClubEntity.createdAt.desc();
+            return bookClubEntity.targetDate.desc();
         }
         if (orderType == OrderType.ASC) {
-            return bookClubEntity.createdAt.asc();
+            return bookClubEntity.targetDate.asc();
         }
         if (orderType == OrderType.END) {
             return bookClubEntity.endDate.desc();
@@ -97,6 +97,7 @@ public class BookClubQueryRepository {
                 bookClubEntity.createdAt,
                 bookClubEntity.isInactive,
                 bookClubEntity.hasImage,
+                bookClubEntity.address,
                 bookClubMemberEntity.count().intValue().as("memberCount"),
                 Expressions.booleanTemplate("case when {0} > 0 then true else false end",
                                 bookClubLikeEntity.count())

@@ -25,9 +25,10 @@ public class BookClubDto {
     private final Boolean hasImage;
     private final Boolean isLiked;
     private final Integer memberCount;
+    private final String address;
 
     @QueryProjection
-    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, LocalDateTime createdAt, Boolean isInactive, Boolean hasImage, int memberCount, Boolean isLiked) {
+    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, LocalDateTime createdAt, Boolean isInactive, Boolean hasImage, String address, int memberCount, Boolean isLiked) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,11 +42,12 @@ public class BookClubDto {
         this.createdAt = createdAt;
         this.isInactive = isInactive;
         this.hasImage = hasImage;
+        this.address = address;
         this.memberCount = memberCount;
         this.isLiked = isLiked;
     }
 
     public BookClub toModel(String imageUrl) {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, memberCount, isInactive, isLiked, imageUrl);
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, memberCount, isInactive, isLiked, imageUrl, address);
     }
 }

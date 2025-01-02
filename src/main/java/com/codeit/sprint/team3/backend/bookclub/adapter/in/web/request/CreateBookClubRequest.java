@@ -29,9 +29,10 @@ public record CreateBookClubRequest(
         Integer memberLimit,
         String city,
         String town,
-        String detailAddress
+        String detailAddress,
+        String address
 ) {
     public BookClub toDomain() {
-        return BookClub.of(title, description, MeetingType.getCommandType(meetingType), BookClubType.getCommandType(bookClubType), targetDate, endDate, memberLimit, city, town, detailAddress);
+        return BookClub.of(title, description, MeetingType.getCommandType(meetingType), BookClubType.getCommandType(bookClubType), targetDate, endDate, memberLimit, city, town, detailAddress, address);
     }
 }

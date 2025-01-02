@@ -17,7 +17,8 @@ public record BookClubResponse(
         int memberCount,
         boolean isLiked,
         boolean isInactive,
-        String imageUrl
+        String imageUrl,
+        String address
 ) {
     public static BookClubResponse from(BookClub bookClub) {
         return new BookClubResponse(
@@ -33,7 +34,8 @@ public record BookClubResponse(
                 bookClub.getMemberCount(),
                 bookClub.isLiked(),
                 bookClub.isInactive(),
-                bookClub.getImageUrl()
+                bookClub.getImageUrl(),
+                bookClub.getAddress()
         );
     }
 }

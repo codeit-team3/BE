@@ -36,6 +36,7 @@ public class BookClubEntity {
     @ColumnDefault("false")
     private Boolean isInactive;
     private Boolean hasImage;
+    private String address;
 
     protected BookClubEntity() {
     }
@@ -56,7 +57,8 @@ public class BookClubEntity {
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             Boolean isInactive,
-            Boolean hasImage
+            Boolean hasImage,
+            String address
     ) {
         this.title = title;
         this.description = description;
@@ -73,6 +75,7 @@ public class BookClubEntity {
         this.updatedAt = updatedAt;
         this.isInactive = isInactive;
         this.hasImage = hasImage;
+        this.address = address;
     }
 
     public static BookClubEntity of(BookClub bookClub, Long userId, Boolean hasImage) {
@@ -87,6 +90,7 @@ public class BookClubEntity {
                 .city(bookClub.getCity())
                 .town(bookClub.getTown())
                 .detailAddress(bookClub.getDetailAddress())
+                .address(bookClub.getAddress())
                 .createdBy(userId)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -96,11 +100,11 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, "");
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, "", address);
     }
 
     public BookClub toModel(String imageUrl) {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, imageUrl);
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, imageUrl, address);
     }
 
     public void delete() {
