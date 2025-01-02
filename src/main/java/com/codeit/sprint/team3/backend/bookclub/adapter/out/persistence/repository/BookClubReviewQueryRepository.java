@@ -54,6 +54,15 @@ public class BookClubReviewQueryRepository {
         return rate == null ? 0 : rate;
     }
 
+    public List<BookClubReviewEntity> getBookClubReviewsByBookClubId(Long bookClubId) {
+        return jpaQueryFactory.selectFrom(bookClubReviewEntity)
+                .where(
+                        bookClubReviewEntity.bookClubId.eq(bookClubId),
+                        bookClubReviewEntity.isInactive.isFalse()
+                )
+                .fetch();
+    }
+
     public List<BookClubReviewEntity> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
         BooleanBuilder booleanBuilder = new BooleanBuilder()
                 .and(bookClubReviewEntity.userId.eq(userId));
