@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"bookClubId", "userId"})
-})
+}, name = "bookclub_likes")
 public class BookClubLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

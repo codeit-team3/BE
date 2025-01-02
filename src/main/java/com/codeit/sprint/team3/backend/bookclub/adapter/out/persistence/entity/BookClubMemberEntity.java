@@ -1,15 +1,13 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubMember;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Table(name = "bookclub_members")
 public class BookClubMemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

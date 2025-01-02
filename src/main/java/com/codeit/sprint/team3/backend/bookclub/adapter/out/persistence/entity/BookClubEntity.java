@@ -3,10 +3,7 @@ package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "bookclubs")
 public class BookClubEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
