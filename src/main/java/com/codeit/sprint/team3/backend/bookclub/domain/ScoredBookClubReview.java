@@ -11,8 +11,9 @@ import java.util.List;
 public class ScoredBookClubReview {
     private final Double score;
     private final List<BookClubReview> bookClubReviews;
+    private final BookClubReviewCount bookClubReviewCount;
 
-    public static ScoredBookClubReview of(Double score, List<BookClubReview> bookClubReviews) {
-        return new ScoredBookClubReview(score, bookClubReviews);
+    public static ScoredBookClubReview of(Double score, List<BookClubReview> bookClubReviews, BookClubReviewCount bookClubReviewCount) {
+        return new ScoredBookClubReview(score, bookClubReviews, bookClubReviewCount);
     }
 }

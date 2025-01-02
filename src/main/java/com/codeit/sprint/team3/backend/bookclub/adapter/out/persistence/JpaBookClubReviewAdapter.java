@@ -8,6 +8,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.reposito
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewQueryRepository;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.BookClubReviewPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReviewCount;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import com.codeit.sprint.team3.backend.bookclub.domain.ScoredBookClubReview;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,9 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     @Override
     public ScoredBookClubReview findAllByBookClubId(Long bookClubId, Pageable pageable, OrderType order) {
         double averageRating = bookClubReviewQueryRepository.getBookClubReviewAverageRating(bookClubId);
+        Map<Integer, Long> ratingToCount = bookClubReviewQueryRepository.getBookClubReviewsByBookClubId(bookClubId)
+                .stream()
+                .collect(Collectors.groupingBy(BookClubReviewEntity::getRating, Collectors.counting()));
         List<BookClubReviewEntity> bookClubReviewEntities = bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order);
         Map<Long, UserEntity> userIdToUserEntity = userRepository.findAllById(extractUserIds(bookClubReviewEntities))
                 .stream()
@@ -40,7 +44,7 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
         List<BookClubReview> bookClubReviews = bookClubReviewEntities.stream()
                 .map(bookClubReviewEntity -> bookClubReviewEntity.toDomain(userIdToUserEntity.get(bookClubReviewEntity.getUserId())))
                 .toList();
-        return ScoredBookClubReview.of(averageRating, bookClubReviews);
+        return ScoredBookClubReview.of(averageRating, bookClubReviews, BookClubReviewCount.of(ratingToCount));
     }
 
     @Override
