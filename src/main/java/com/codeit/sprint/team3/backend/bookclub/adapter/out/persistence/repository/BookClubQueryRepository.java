@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.codeit.sprint.team3.backend.auth.adapter.out.persistence.QUserEntity.userEntity;
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubEntity.bookClubEntity;
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubLikeEntity.bookClubLikeEntity;
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubMemberEntity.bookClubMemberEntity;
@@ -52,10 +53,11 @@ public class BookClubQueryRepository {
                     .or(bookClubEntity.town.contains(searchKeyword)));
         }
 
-        return jpaQueryFactory.select(getBookClubDtoProjection())
+        return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
                 .where(
                         filterEnum(bookClubType, bookClubEntity.bookClubType),
                         filterEnum(meetingType, bookClubEntity.meetingType),
@@ -82,7 +84,7 @@ public class BookClubQueryRepository {
         throw new IllegalTypeConversionException(orderType.name());
     }
 
-    private static QBookClubDto getBookClubDtoProjection() {
+    private static QBookClubDto getBookClubDtoProjection(Long userId) {
         return new QBookClubDto(
                 bookClubEntity.id,
                 bookClubEntity.title,
@@ -92,7 +94,9 @@ public class BookClubQueryRepository {
                 bookClubEntity.targetDate,
                 bookClubEntity.endDate,
                 bookClubEntity.memberLimit,
+                bookClubEntity.city,
                 bookClubEntity.town,
+                bookClubEntity.detailAddress,
                 bookClubEntity.createdBy,
                 bookClubEntity.createdAt,
                 bookClubEntity.isInactive,
@@ -101,9 +105,12 @@ public class BookClubQueryRepository {
                 bookClubMemberEntity.count().intValue().as("memberCount"),
                 Expressions.booleanTemplate("case when {0} > 0 then true else false end",
                                 bookClubLikeEntity.count())
-                        .as("isLiked")
+                        .as("isLiked"),
+                Expressions.booleanTemplate("case when sum(case when {0} = {1} then 1 else 0 end) > 0 then true else false end",
+                        bookClubMemberEntity.userId, userId).as("isJoined"),
+                userEntity.image.as("userImage"),
+                userEntity.nickname
         );
-
     }
 
     private <T extends Enum<T>> BooleanExpression filterEnum(T enumValue, EnumPath<T> enumPath) {
@@ -114,10 +121,11 @@ public class BookClubQueryRepository {
     }
 
     public BookClubDto findBookClubBy(Long bookClubId, Long userId) {
-        return jpaQueryFactory.select(getBookClubDtoProjection())
+        return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .leftJoin(bookClubEntity).on(bookClubEntity.createdBy.eq(userId))
                 .where(
                         bookClubEntity.isInactive.eq(false),
                         bookClubEntity.id.eq(bookClubId)

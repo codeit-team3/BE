@@ -4,6 +4,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeCon
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubReviewEntity.bookClubReviewEntity;
 
@@ -52,6 +56,23 @@ public class BookClubReviewQueryRepository {
                 .where(bookClubReviewEntity.bookClubId.eq(bookClubId))
                 .fetchOne();
         return rate == null ? 0 : rate;
+    }
+
+    public Map<Long, Double> getBookClubReviewAverageRatingByBookClubIds(List<Long> bookClubIds) {
+        List<Tuple> averageRateList = jpaQueryFactory.select(
+                        bookClubReviewEntity.bookClubId,
+                        Expressions.template(Double.class, "ROUND(AVG({0}), 1)", bookClubReviewEntity.rating).as("averageRate")
+                )
+                .from(bookClubReviewEntity)
+                .where(bookClubReviewEntity.bookClubId.in(bookClubIds))
+                .groupBy(bookClubReviewEntity.bookClubId)  // groupBy 추가
+                .fetch();
+
+        return averageRateList.stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(bookClubReviewEntity.bookClubId),
+                        tuple -> Optional.ofNullable(tuple.get(1, Double.class)).orElse(0.0)
+                ));
     }
 
     public List<BookClubReviewEntity> getBookClubReviewsByBookClubId(Long bookClubId) {
