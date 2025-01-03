@@ -77,7 +77,7 @@ public class BookClubQueryRepository {
             return bookClubEntity.targetDate.asc();
         }
         if (orderType == OrderType.END) {
-            return bookClubEntity.endDate.desc();
+            return bookClubEntity.endDate.asc();
         }
         throw new IllegalTypeConversionException(orderType.name());
     }
