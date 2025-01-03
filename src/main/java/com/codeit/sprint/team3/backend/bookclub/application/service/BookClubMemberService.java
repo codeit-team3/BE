@@ -19,17 +19,12 @@ public class BookClubMemberService implements BookClubMemberUseCase {
     @Override
     @Transactional
     public void joinBookClub(Long bookClubId, Long userId) {
-        //존재하는 BookClub인지 확인
-        BookClub bookClub = bookClubUseCase.getById(bookClubId);
-        //이미 가입한 BookClub인지 확인
+        bookClubUseCase.getById(bookClubId);
         if (commandBookClubMemberPort.existsByBookClubIdAndUserId(bookClubId, userId)) {
             throw new BookClubMemberAlreadyExistsException();
         }
-        //BookClub에 가입
         //TODO 동시성 문제가 생길 수 있으므로 Lock 필요. 어떻게 구현할것인가?
         commandBookClubMemberPort.joinBookClub(bookClubId, userId);
-        //TODO 채팅방에 멤버 추가
-        //TODO 알림
     }
 
     @Override

@@ -18,7 +18,9 @@ public class BookClubDto {
     private final LocalDateTime targetDate;
     private final LocalDateTime endDate;
     private final int memberLimit;
+    private final String city;
     private final String town;
+    private final String detailAddress;
     private final Long createdBy;
     private final LocalDateTime createdAt;
     private final Boolean isInactive;
@@ -26,9 +28,12 @@ public class BookClubDto {
     private final Boolean isLiked;
     private final Integer memberCount;
     private final String address;
+    private final Boolean isJoined;
+    private final String userImage;
+    private final String nickname;
 
     @QueryProjection
-    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, LocalDateTime createdAt, Boolean isInactive, Boolean hasImage, String address, int memberCount, Boolean isLiked) {
+    public BookClubDto(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress, Long createdBy, LocalDateTime createdAt, Boolean isInactive, Boolean hasImage, String address, int memberCount, Boolean isLiked, Boolean isJoined, String userImage, String nickname) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -37,7 +42,9 @@ public class BookClubDto {
         this.targetDate = targetDate;
         this.endDate = endDate;
         this.memberLimit = memberLimit;
+        this.city = city;
         this.town = town;
+        this.detailAddress = detailAddress;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.isInactive = isInactive;
@@ -45,9 +52,34 @@ public class BookClubDto {
         this.address = address;
         this.memberCount = memberCount;
         this.isLiked = isLiked;
+        this.isJoined = isJoined;
+        this.userImage = userImage;
+        this.nickname = nickname;
     }
 
-    public BookClub toModel(String imageUrl) {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, memberCount, isInactive, isLiked, imageUrl, address);
+    public BookClub toModel(String imageUrl, Double rating) {
+        return BookClub.of(
+                id,
+                title,
+                description,
+                meetingType,
+                bookClubType,
+                targetDate,
+                endDate,
+                memberLimit,
+                city,
+                town,
+                detailAddress,
+                createdBy,
+                memberCount,
+                isInactive,
+                isLiked,
+                imageUrl,
+                address,
+                rating,
+                isJoined,
+                userImage,
+                nickname
+        );
     }
 }

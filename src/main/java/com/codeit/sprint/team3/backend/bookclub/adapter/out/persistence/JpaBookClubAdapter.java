@@ -5,6 +5,7 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.B
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubDto;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubEntityRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubQueryRepository;
+import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewQueryRepository;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.CommandBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.QueryBookClubPort;
 import com.codeit.sprint.team3.backend.bookclub.domain.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPort {
     private final BookClubEntityRepository bookClubEntityRepository;
     private final BookClubQueryRepository bookClubQueryRepository;
+    private final BookClubReviewQueryRepository bookClubReviewQueryRepository;
     private final ImageFactory imageFactory;
 
     @Override
@@ -37,16 +40,20 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
 
     @Override
     public List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId) {
-        return bookClubQueryRepository.findBookClubsBy(bookClubType, meetingType, memberLimitMin, memberLimitMax, location, targetDate, orderType, pageable, searchKeyword, userId)
-                .stream()
-                .map(bookClubDto -> bookClubDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubDto.getId(), "image.jpg", bookClubDto.getHasImage())))
+        List<BookClubDto> bookClubDtos = bookClubQueryRepository.findBookClubsBy(bookClubType, meetingType, memberLimitMin, memberLimitMax, location, targetDate, orderType, pageable, searchKeyword, userId);
+        List<Long> bookClubIds = bookClubDtos.stream()
+                .map(BookClubDto::getId)
+                .toList();
+        Map<Long, Double> bookClubIdToRating = bookClubReviewQueryRepository.getBookClubReviewAverageRatingByBookClubIds(bookClubIds);
+        return bookClubDtos.stream()
+                .map(bookClubDto -> bookClubDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubDto.getId(), "image.jpg", bookClubDto.getHasImage()), bookClubIdToRating.getOrDefault(bookClubDto.getId(), 0.)))
                 .toList();
     }
 
     @Override
     public Optional<BookClub> findById(Long bookClubId) {
         return bookClubEntityRepository.findById(bookClubId)
-                .map(bookClubEntity -> bookClubEntity.toModel(imageFactory.createImageUrl("bookclubs", bookClubEntity.getId(), "image.jpg", bookClubEntity.getHasImage())));
+                .map(BookClubEntity::toModel);
     }
 
     @Override
@@ -55,22 +62,31 @@ public class JpaBookClubAdapter implements CommandBookClubPort, QueryBookClubPor
         if (bookClubDto == null) {
             throw new BookClubNotExistException();
         }
-        return bookClubDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubId, "image.jpg", bookClubDto.getHasImage()));
+        double averageRating = bookClubReviewQueryRepository.getBookClubReviewAverageRating(bookClubId);
+        return bookClubDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubId, "image.jpg", bookClubDto.getHasImage()), averageRating);
     }
 
     @Override
     public List<BookClub> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
-        return bookClubQueryRepository.findMyCreatedBookClubs(userId, orderType, pageable, includeInactive)
-                .stream()
-                .map(bookClubEntity -> bookClubEntity.toModel(imageFactory.createImageUrl("bookclubs", bookClubEntity.getId(), "image.jpg", bookClubEntity.getHasImage())))
+        List<BookClubEntity> bookClubEntities = bookClubQueryRepository.findMyCreatedBookClubs(userId, orderType, pageable, includeInactive);
+        List<Long> bookClubIds = bookClubEntities.stream()
+                .map(BookClubEntity::getId)
+                .toList();
+        Map<Long, Double> bookClubIdToRating = bookClubReviewQueryRepository.getBookClubReviewAverageRatingByBookClubIds(bookClubIds);
+        return bookClubEntities.stream()
+                .map(bookClubEntity -> bookClubEntity.toModel(imageFactory.createImageUrl("bookclubs", bookClubEntity.getId(), "image.jpg", bookClubEntity.getHasImage()), bookClubIdToRating.getOrDefault(bookClubEntity.getId(), 0.)))
                 .toList();
     }
 
     @Override
     public List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
-        return bookClubQueryRepository.findUserJoinedBookClubs(userId, orderType, pageable, includeInactive)
-                .stream()
-                .map(bookClubEntity -> bookClubEntity.toModel(imageFactory.createImageUrl("bookclubs", bookClubEntity.getId(), "image.jpg", bookClubEntity.getHasImage())))
+        List<BookClubEntity> bookClubEntities = bookClubQueryRepository.findUserJoinedBookClubs(userId, orderType, pageable, includeInactive);
+        List<Long> bookClubIds = bookClubEntities.stream()
+                .map(BookClubEntity::getId)
+                .toList();
+        Map<Long, Double> bookClubIdToRating = bookClubReviewQueryRepository.getBookClubReviewAverageRatingByBookClubIds(bookClubIds);
+        return bookClubEntities.stream()
+                .map(bookClubEntity -> bookClubEntity.toModel(imageFactory.createImageUrl("bookclubs", bookClubEntity.getId(), "image.jpg", bookClubEntity.getHasImage()), bookClubIdToRating.getOrDefault(bookClubEntity.getId(), 0.)))
                 .toList();
     }
 }

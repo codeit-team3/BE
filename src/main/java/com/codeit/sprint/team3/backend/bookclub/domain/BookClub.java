@@ -25,9 +25,35 @@ public class BookClub {
     private final boolean isLiked;
     private final String imageUrl;
     private final String address;
+    private final Double rating;
+    private final boolean isJoined;
+    private final String userImage;
+    private final String nickname;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClub(Long id, String description, String title, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String city, String town, String detailAddress, Long createdBy, int memberCount, boolean isInactive, boolean isLiked, String imageUrl, String address) {
+    private BookClub(
+            Long id,
+            String description,
+            String title,
+            MeetingType meetingType,
+            BookClubType bookClubType,
+            LocalDateTime targetDate,
+            LocalDateTime endDate,
+            int memberLimit,
+            String city,
+            String town,
+            String detailAddress,
+            Long createdBy,
+            int memberCount,
+            boolean isInactive,
+            boolean isLiked,
+            String imageUrl,
+            String address,
+            Double rating,
+            boolean isJoined,
+            String userImage,
+            String nickname
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -45,6 +71,10 @@ public class BookClub {
         this.isLiked = isLiked;
         this.imageUrl = imageUrl;
         this.address = address;
+        this.rating = rating;
+        this.isJoined = isJoined;
+        this.userImage = userImage;
+        this.nickname = nickname;
     }
 
     //Request
@@ -65,7 +95,22 @@ public class BookClub {
     }
 
     //Entity to domain
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, boolean isInactive, String imageUrl, String address) {
+    public static BookClub of(
+            Long id,
+            String title,
+            String description,
+            MeetingType meetingType,
+            BookClubType bookClubType,
+            LocalDateTime targetDate,
+            LocalDateTime endDate,
+            int memberLimit,
+            String town,
+            Long createdBy,
+            boolean isInactive,
+            String imageUrl,
+            String address,
+            Double rating
+    ) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -80,11 +125,34 @@ public class BookClub {
                 .isInactive(isInactive)
                 .imageUrl(imageUrl)
                 .address(address)
+                .rating(rating)
                 .build();
     }
 
     //Dto to domain
-    public static BookClub of(Long id, String title, String description, MeetingType meetingType, BookClubType bookClubType, LocalDateTime targetDate, LocalDateTime endDate, int memberLimit, String town, Long createdBy, int memberCount, boolean isInactive, boolean isLiked, String imageUrl, String address) {
+    public static BookClub of(
+            Long id,
+            String title,
+            String description,
+            MeetingType meetingType,
+            BookClubType bookClubType,
+            LocalDateTime targetDate,
+            LocalDateTime endDate,
+            int memberLimit,
+            String city,
+            String town,
+            String detailAddress,
+            Long createdBy,
+            int memberCount,
+            boolean isInactive,
+            boolean isLiked,
+            String imageUrl,
+            String address,
+            Double rating,
+            boolean isJoined,
+            String userImage,
+            String nickname
+    ) {
         return BookClub.builder()
                 .id(id)
                 .title(title)
@@ -94,13 +162,19 @@ public class BookClub {
                 .targetDate(targetDate)
                 .endDate(endDate)
                 .memberLimit(memberLimit)
+                .city(city)
                 .town(town)
+                .detailAddress(detailAddress)
                 .createdBy(createdBy)
                 .memberCount(memberCount)
                 .isInactive(isInactive)
                 .isLiked(isLiked)
                 .imageUrl(imageUrl)
                 .address(address)
+                .rating(rating)
+                .isJoined(isJoined)
+                .userImage(userImage)
+                .nickname(nickname)
                 .build();
     }
 }

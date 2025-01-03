@@ -98,11 +98,11 @@ public class BookClubEntity {
     }
 
     public BookClub toModel() {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, "", address);
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, "", address, 0.);
     }
 
-    public BookClub toModel(String imageUrl) {
-        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, imageUrl, address);
+    public BookClub toModel(String imageUrl, Double rating) {
+        return BookClub.of(id, title, description, meetingType, bookClubType, targetDate, endDate, memberLimit, town, createdBy, isInactive, imageUrl, address, rating);
     }
 
     public void delete() {
