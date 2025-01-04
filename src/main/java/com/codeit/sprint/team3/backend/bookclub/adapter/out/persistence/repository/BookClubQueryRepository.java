@@ -10,6 +10,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.util.StringUtils;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -160,11 +161,16 @@ public class BookClubQueryRepository {
         }
         return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(targetUserId)).and(builder))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(builder))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
                 .where(
                         bookClubMemberEntity.isInactive.eq(false),
+                        JPAExpressions
+                                .selectOne()
+                                .from(bookClubMemberEntity)
+                                .where(bookClubMemberEntity.bookClubId.eq(bookClubEntity.id).and(bookClubMemberEntity.userId.eq(targetUserId)))
+                                .exists(),
                         builder
                 )
                 .groupBy(bookClubEntity.id)
