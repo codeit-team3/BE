@@ -124,7 +124,7 @@ public class BookClubController {
             userId = userProfileUseCase.getUserByEmail(email).getId();
         }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
@@ -141,33 +141,43 @@ public class BookClubController {
             userId = userProfileUseCase.getUserByEmail(email).getId();
         }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
     @GetMapping("/user/{userId}/created")
     public ResponseEntity<BookClubResponses> findUserCreatedBookClubs(
-            @PathVariable Long userId,
+            @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }
 
     @GetMapping("/user/{userId}/joined")
     public ResponseEntity<BookClubResponses> findUserJoinedBookClubs(
-            @PathVariable Long userId,
+            @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(BookClubResponses.from(bookClubs));
     }

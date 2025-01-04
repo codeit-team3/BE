@@ -23,7 +23,7 @@ public class ChatHistoryService implements ChatHistoryUseCase {
     @Override
     public List<ChatMessage> getRecentClubChatsForUser(Long userId) {
         return queryBookClubPort
-                .findUserJoinedBookClubs(userId, OrderType.DESC, Pageable.ofSize(100), false)
+                .findUserJoinedBookClubs(userId, userId, OrderType.DESC, Pageable.ofSize(100), false)
                 .stream()
                 .map(BookClub::getId)
                 .map(loadChatPort::loadRecentChat)
@@ -34,7 +34,7 @@ public class ChatHistoryService implements ChatHistoryUseCase {
     @Override
     public List<ChatMessage> getAllClubChats(Long userId, Long bookClubId) {
         boolean isJoined = queryBookClubPort
-                .findUserJoinedBookClubs(userId, OrderType.DESC, Pageable.ofSize(100), false)
+                .findUserJoinedBookClubs(userId, userId, OrderType.DESC, Pageable.ofSize(100), false)
                 .stream()
                 .map(BookClub::getId)
                 .anyMatch(id -> id.equals(bookClubId));
