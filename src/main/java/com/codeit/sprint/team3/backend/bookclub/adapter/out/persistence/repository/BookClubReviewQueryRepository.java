@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.codeit.sprint.team3.backend.auth.adapter.out.persistence.QUserEntity.userEntity;
+import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubEntity.bookClubEntity;
 import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.QBookClubReviewEntity.bookClubReviewEntity;
 
 @Repository
@@ -24,8 +26,24 @@ import static com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.e
 public class BookClubReviewQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<BookClubReviewEntity> findAllByBookClubId(Long id, Pageable pageable, OrderType order) {
-        return jpaQueryFactory.selectFrom(bookClubReviewEntity)
+    public List<BookClubReviewDto> findAllByBookClubId(Long id, Pageable pageable, OrderType order) {
+        return jpaQueryFactory.select(new QBookClubReviewDto(
+                        bookClubReviewEntity.id,
+                        bookClubReviewEntity.bookClubId,
+                        bookClubReviewEntity.userId,
+                        bookClubReviewEntity.rating,
+                        bookClubReviewEntity.content,
+                        bookClubReviewEntity.isInactive,
+                        bookClubReviewEntity.createdAt,
+                        userEntity.nickname,
+                        userEntity.image.as("userImage"),
+                        bookClubEntity.title.as("bookClubTitle"),
+                        bookClubEntity.hasImage,
+                        bookClubEntity.bookClubType
+                ))
+                .from(bookClubReviewEntity)
+                .innerJoin(userEntity).on(bookClubReviewEntity.userId.eq(userEntity.id))
+                .innerJoin(bookClubEntity).on(bookClubReviewEntity.bookClubId.eq(bookClubEntity.id))
                 .where(
                         bookClubReviewEntity.bookClubId.eq(id),
                         bookClubReviewEntity.isInactive.isFalse()
@@ -84,13 +102,29 @@ public class BookClubReviewQueryRepository {
                 .fetch();
     }
 
-    public List<BookClubReviewEntity> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
+    public List<BookClubReviewDto> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
         BooleanBuilder booleanBuilder = new BooleanBuilder()
                 .and(bookClubReviewEntity.userId.eq(userId));
         if (!includeInactive) {
             booleanBuilder.and(bookClubReviewEntity.isInactive.isFalse());
         }
-        return jpaQueryFactory.selectFrom(bookClubReviewEntity)
+        return jpaQueryFactory.select(new QBookClubReviewDto(
+                        bookClubReviewEntity.id,
+                        bookClubReviewEntity.bookClubId,
+                        bookClubReviewEntity.userId,
+                        bookClubReviewEntity.rating,
+                        bookClubReviewEntity.content,
+                        bookClubReviewEntity.isInactive,
+                        bookClubReviewEntity.createdAt,
+                        userEntity.nickname,
+                        userEntity.image.as("userImage"),
+                        bookClubEntity.title.as("bookClubTitle"),
+                        bookClubEntity.hasImage,
+                        bookClubEntity.bookClubType
+                ))
+                .from(bookClubReviewEntity)
+                .innerJoin(userEntity).on(bookClubReviewEntity.userId.eq(userEntity.id))
+                .innerJoin(bookClubEntity).on(bookClubReviewEntity.bookClubId.eq(bookClubEntity.id))
                 .where(booleanBuilder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

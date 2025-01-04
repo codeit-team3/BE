@@ -15,10 +15,13 @@ public class BookClubReview {
     private final String content;
     private final LocalDateTime createdAt;
     private final String nickname;
-    private final String image;
+    private final String userImage;
+    private final String bookClubTitle;
+    private final String bookClubImageUrl;
+    private final BookClubType bookClubType;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private BookClubReview(Long id, Long userId, Long bookClubId, Integer rating, String content, LocalDateTime createdAt, String nickname, String image) {
+    private BookClubReview(Long id, Long userId, Long bookClubId, Integer rating, String content, LocalDateTime createdAt, String nickname, String userImage, String bookClubTitle, String bookClubImageUrl, BookClubType bookClubType) {
         this.id = id;
         this.userId = userId;
         this.bookClubId = bookClubId;
@@ -26,9 +29,13 @@ public class BookClubReview {
         this.content = content;
         this.createdAt = createdAt;
         this.nickname = nickname;
-        this.image = image;
+        this.userImage = userImage;
+        this.bookClubTitle = bookClubTitle;
+        this.bookClubImageUrl = bookClubImageUrl;
+        this.bookClubType = bookClubType;
     }
 
+    //create
     public static BookClubReview of(Long bookClubId, Long userId, Integer rating, String content) {
         return BookClubReview.builder()
                 .userId(userId)
@@ -38,17 +45,7 @@ public class BookClubReview {
                 .build();
     }
 
-    public static BookClubReview of(Long id, Long bookClubId, Long userId, Integer rating, String content) {
-        return BookClubReview.builder()
-                .id(id)
-                .userId(userId)
-                .bookClubId(bookClubId)
-                .rating(rating)
-                .content(content)
-                .build();
-    }
-
-    public static BookClubReview of(Long id, Long bookClubId, Long userId, Integer rating, String content, LocalDateTime createdAt, String nickname, String image) {
+    public static BookClubReview of(Long id, Long bookClubId, Long userId, Integer rating, String content, LocalDateTime createdAt, String nickname, String userImage, String bookClubTitle, String bookClubImageUrl, BookClubType bookClubType) {
         return BookClubReview.builder()
                 .id(id)
                 .userId(userId)
@@ -57,7 +54,10 @@ public class BookClubReview {
                 .content(content)
                 .createdAt(createdAt)
                 .nickname(nickname)
-                .image(image)
+                .userImage(userImage)
+                .bookClubTitle(bookClubTitle)
+                .bookClubImageUrl(bookClubImageUrl)
+                .bookClubType(bookClubType)
                 .build();
     }
 }

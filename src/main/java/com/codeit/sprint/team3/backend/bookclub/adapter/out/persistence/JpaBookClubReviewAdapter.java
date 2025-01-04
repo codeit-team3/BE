@@ -1,16 +1,13 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence;
 
-import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserEntity;
 import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.BookClubReviewNotExistException;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubReviewEntity;
+import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewDto;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewEntityRepository;
 import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository.BookClubReviewQueryRepository;
 import com.codeit.sprint.team3.backend.bookclub.application.port.out.BookClubReviewPort;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
-import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReviewCount;
-import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
-import com.codeit.sprint.team3.backend.bookclub.domain.ScoredBookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -25,6 +22,7 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
     private final BookClubReviewEntityRepository bookClubReviewRepository;
     private final BookClubReviewQueryRepository bookClubReviewQueryRepository;
     private final UserRepository userRepository;
+    private final ImageFactory imageFactory;
 
     @Override
     public void saveBookClubReview(BookClubReview bookClubReview) {
@@ -33,18 +31,19 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
 
     @Override
     public ScoredBookClubReview findAllByBookClubId(Long bookClubId, Pageable pageable, OrderType order) {
-        double averageRating = bookClubReviewQueryRepository.getBookClubReviewAverageRating(bookClubId);
         Map<Integer, Long> ratingToCount = bookClubReviewQueryRepository.getBookClubReviewsByBookClubId(bookClubId)
                 .stream()
                 .collect(Collectors.groupingBy(BookClubReviewEntity::getRating, Collectors.counting()));
-        List<BookClubReviewEntity> bookClubReviewEntities = bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order);
-        Map<Long, UserEntity> userIdToUserEntity = userRepository.findAllById(extractUserIds(bookClubReviewEntities))
+        double averageRating = ratingToCount.entrySet().stream()
+                .mapToDouble(entry -> entry.getKey() * entry.getValue()) // 평점 * 갯수
+                .sum() // 곱한 값들의 총합
+                / ratingToCount.values().stream().mapToLong(count -> count).sum();
+
+        List<BookClubReview> bookClubReviews = bookClubReviewQueryRepository.findAllByBookClubId(bookClubId, pageable, order)
                 .stream()
-                .collect(Collectors.toMap(UserEntity::getId, user -> user));
-        List<BookClubReview> bookClubReviews = bookClubReviewEntities.stream()
-                .map(bookClubReviewEntity -> bookClubReviewEntity.toDomain(userIdToUserEntity.get(bookClubReviewEntity.getUserId())))
+                .map(bookClubReviewDto -> bookClubReviewDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubReviewDto.bookClubId(), "image.jpg", bookClubReviewDto.hasImage())))
                 .toList();
-        return ScoredBookClubReview.of(averageRating, bookClubReviews, BookClubReviewCount.of(ratingToCount));
+        return ScoredBookClubReview.of(Double.parseDouble(String.format("%.1f", averageRating)), bookClubReviews, BookClubReviewCount.of(ratingToCount));
     }
 
     @Override
@@ -56,12 +55,9 @@ public class JpaBookClubReviewAdapter implements BookClubReviewPort {
 
     @Override
     public List<BookClubReview> findUserReviews(Long userId, Pageable pageable, OrderType orderType, boolean includeInactive) {
-        List<BookClubReviewEntity> bookClubReviewEntities = bookClubReviewQueryRepository.findUserReviews(userId, pageable, orderType, includeInactive);
-        Map<Long, UserEntity> userIdToUserEntity = userRepository.findAllById(extractUserIds(bookClubReviewEntities))
-                .stream()
-                .collect(Collectors.toMap(UserEntity::getId, user -> user));
-        return bookClubReviewEntities.stream()
-                .map(bookClubReviewEntity -> bookClubReviewEntity.toDomain(userIdToUserEntity.get(bookClubReviewEntity.getUserId())))
+        List<BookClubReviewDto> bookClubReviewDtos = bookClubReviewQueryRepository.findUserReviews(userId, pageable, orderType, includeInactive);
+        return bookClubReviewDtos.stream()
+                .map(bookClubReviewDto -> bookClubReviewDto.toModel(imageFactory.createImageUrl("bookclubs", bookClubReviewDto.bookClubId(), "image.jpg", bookClubReviewDto.hasImage())))
                 .toList();
     }
 

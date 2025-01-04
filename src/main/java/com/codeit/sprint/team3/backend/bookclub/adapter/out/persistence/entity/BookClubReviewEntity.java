@@ -1,6 +1,5 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity;
 
-import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserEntity;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -37,14 +36,6 @@ public class BookClubReviewEntity {
 
     public static BookClubReviewEntity from(BookClubReview bookClubReview) {
         return new BookClubReviewEntity(bookClubReview.getBookClubId(), bookClubReview.getUserId(), bookClubReview.getRating(), bookClubReview.getContent());
-    }
-
-    public BookClubReview toDomain() {
-        return BookClubReview.of(id, bookClubId, userId, rating, content);
-    }
-
-    public BookClubReview toDomain(UserEntity userEntity) {
-        return BookClubReview.of(id, bookClubId, userId, rating, content, userEntity.getCreatedAt().toLocalDateTime(), userEntity.getNickname(), userEntity.getImage());
     }
 
     public void inactivate() {

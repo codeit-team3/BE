@@ -1,6 +1,7 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response;
 
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
+import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 
 import java.time.LocalDateTime;
 
@@ -10,9 +11,12 @@ public record BookClubReviewResponse(
         Long bookClubId,
         Integer rating,
         String content,
+        LocalDateTime createdAt,
         String nickname,
-        String image,
-        LocalDateTime createdAt
+        String userImage,
+        String bookClubTitle,
+        String bookClubImageUrl,
+        BookClubType bookClubType
 ) {
     public static BookClubReviewResponse from(BookClubReview bookClubReview) {
         return new BookClubReviewResponse(
@@ -21,9 +25,12 @@ public record BookClubReviewResponse(
                 bookClubReview.getBookClubId(),
                 bookClubReview.getRating(),
                 bookClubReview.getContent(),
+                bookClubReview.getCreatedAt(),
                 bookClubReview.getNickname(),
-                bookClubReview.getImage(),
-                bookClubReview.getCreatedAt()
+                bookClubReview.getUserImage(),
+                bookClubReview.getBookClubTitle(),
+                bookClubReview.getBookClubImageUrl(),
+                bookClubReview.getBookClubType()
         );
     }
 }
