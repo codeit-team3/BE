@@ -1,7 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.repository;
 
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.IllegalTypeConversionException;
-import com.codeit.sprint.team3.backend.bookclub.adapter.out.persistence.entity.BookClubEntity;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import com.codeit.sprint.team3.backend.bookclub.domain.OrderType;
@@ -125,7 +124,7 @@ public class BookClubQueryRepository {
                 .from(bookClubEntity)
                 .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
-                .leftJoin(bookClubEntity).on(bookClubEntity.createdBy.eq(userId))
+                .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
                 .where(
                         bookClubEntity.isInactive.eq(false),
                         bookClubEntity.id.eq(bookClubId)
@@ -134,15 +133,17 @@ public class BookClubQueryRepository {
                 .fetchOne();
     }
 
-    public List<BookClubEntity> findMyCreatedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+    public List<BookClubDto> findMyCreatedBookClubs(Long userId, Long targetUserId, OrderType orderType, Pageable pageable, boolean includeInactive) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(bookClubEntity.createdBy.eq(userId));
+        builder.and(bookClubEntity.createdBy.eq(targetUserId));
         if (!includeInactive) {
             builder.and(bookClubEntity.isInactive.eq(false));
         }
-        return jpaQueryFactory.select(bookClubEntity)
+        return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.isInactive.eq(false)))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
                 .where(builder)
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
@@ -151,15 +152,20 @@ public class BookClubQueryRepository {
                 .fetch();
     }
 
-    public List<BookClubEntity> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive) {
+    public List<BookClubDto> findUserJoinedBookClubs(Long userId, Long targetUserId, OrderType orderType, Pageable pageable, boolean includeInactive) {
         BooleanBuilder builder = new BooleanBuilder();
         if (!includeInactive) {
             builder.and(bookClubMemberEntity.isInactive.eq(false));
         }
-        return jpaQueryFactory.select(bookClubEntity)
+        return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
-                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(userId)).and(bookClubMemberEntity.isInactive.isFalse()).and(builder))
+                .innerJoin(bookClubMemberEntity).on(bookClubEntity.id.eq(bookClubMemberEntity.bookClubId).and(bookClubMemberEntity.userId.eq(targetUserId)).and(builder))
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
+                .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
+                .where(
+                        bookClubEntity.isInactive.eq(false),
+                        builder
+                )
                 .groupBy(bookClubEntity.id)
                 .orderBy(getOrderSpecifiers(orderType))
                 .offset(pageable.getOffset())
@@ -167,3 +173,5 @@ public class BookClubQueryRepository {
                 .fetch();
     }
 }
+
+

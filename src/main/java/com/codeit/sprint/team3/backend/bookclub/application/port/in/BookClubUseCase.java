@@ -21,7 +21,7 @@ public interface BookClubUseCase {
 
     BookClub findBookClubById(Long bookClubId, Long userId);
 
-    List<BookClub> findMyCreatedBookClubs(Long userId, OrderType from, Pageable pageable, boolean includeInactive);
+    List<BookClub> findMyCreatedBookClubs(Long userId, Long targetUserId, OrderType from, Pageable pageable, boolean includeInactive);
 
-    List<BookClub> findUserJoinedBookClubs(Long userId, OrderType orderType, Pageable pageable, boolean includeInactive);
+    List<BookClub> findUserJoinedBookClubs(Long userId, Long targetUserId, OrderType orderType, Pageable pageable, boolean includeInactive);
 }
