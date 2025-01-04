@@ -149,7 +149,7 @@ public class BookClubController {
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
-    @GetMapping("/user/{userId}/created")
+    @GetMapping("/users/{userId}/created")
     public ResponseEntity<ExpandedBookClubResponses> findUserCreatedBookClubs(
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
@@ -167,7 +167,7 @@ public class BookClubController {
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
-    @GetMapping("/user/{userId}/joined")
+    @GetMapping("/users/{userId}/joined")
     public ResponseEntity<ExpandedBookClubResponses> findUserJoinedBookClubs(
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
