@@ -22,9 +22,12 @@ public class User {
 
     public void update(UpdateUserProfileCommand command) {
         nickname = command.getNickname()==null? nickname : command.getNickname();
-        image = command.getImage()==null? image : command.getImage();
         description = command.getDescription()==null? description : command.getDescription();
         updatedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
+    public void setImage(String imageURI) {
+        this.image = imageURI;
     }
 
 }

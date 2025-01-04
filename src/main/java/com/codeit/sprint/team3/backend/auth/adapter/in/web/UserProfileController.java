@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Auths")
 @RestController
@@ -40,18 +41,19 @@ public class UserProfileController {
     @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다. 헤더에 액세스 토큰을 포함해야합니다.")
     @SecurityRequirement(name = "JWT")
     public ResponseEntity<UserProfileDto> updateUser(
-            @RequestBody UpdateUserProfileCommand command
+            @RequestPart(required = false) MultipartFile image,
+            @RequestPart(name = "user") UpdateUserProfileCommand command
     ) {
-        validateCommand(command);
+        validateCommand(image, command);
 
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.updateUserProfile(userEmail, command)));
+        return ResponseEntity.ok(UserProfileDto.from(userProfileUseCase.updateUserProfile(userEmail, image, command)));
     }
 
-    private void validateCommand(UpdateUserProfileCommand command) {
-        if (isBlank(command.getNickname()) && isBlank(command.getImage()) && isBlank(command.getDescription())) {
-            throw new IllegalArgumentException("username, image, description 모두 공백일 수 없습니다.");
+    private void validateCommand(MultipartFile image, UpdateUserProfileCommand command) {
+        if (isBlank(command.getNickname()) && isBlank(command.getDescription()) && image == null) {
+            throw new IllegalArgumentException("이미지 업로드 혹은 username, description을 설정하세요.");
         }
     }
 

@@ -13,7 +13,5 @@ import lombok.Getter;
 public class UpdateUserProfileCommand {
     private String nickname;
 
-    private String image;
-
     private String description;
 }
