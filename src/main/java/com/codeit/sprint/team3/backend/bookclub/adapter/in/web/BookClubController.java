@@ -79,7 +79,11 @@ public class BookClubController {
             String location, //동 단위 town
             LocalDateTime targetDate
     ) {
-        Long userId = 1L;
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = 0L;
+        if (!"anonymousUser".equals(email)) {
+            userId = userProfileUseCase.getUserByEmail(email).getId();
+        }
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
         return ResponseEntity.ok()
