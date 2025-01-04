@@ -72,6 +72,7 @@ public class BookClubController {
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "false") Boolean isAvailable,
             String searchKeyword,
             Integer memberLimitMin,
             Integer memberLimitMax,
@@ -84,7 +85,7 @@ public class BookClubController {
             userId = userProfileUseCase.getUserByEmail(email).getId();
         }
         Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId);
+        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId, isAvailable);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }

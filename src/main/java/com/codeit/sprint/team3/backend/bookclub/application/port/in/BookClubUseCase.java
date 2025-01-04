@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookClubUseCase {
     void createBookClub(BookClub bookClub, Long userId, MultipartFile file);
 
-    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId);
+    List<BookClub> findBookClubsBy(BookClubType bookClubType, MeetingType meetingType, Integer memberLimitMin, Integer memberLimitMax, String location, LocalDateTime targetDate, OrderType orderType, Pageable pageable, String searchKeyword, Long userId, Boolean isAvailable);
 
     BookClub getById(Long bookClubId);
 
