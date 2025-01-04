@@ -155,7 +155,7 @@ public class BookClubQueryRepository {
     public List<BookClubDto> findUserJoinedBookClubs(Long userId, Long targetUserId, OrderType orderType, Pageable pageable, boolean includeInactive) {
         BooleanBuilder builder = new BooleanBuilder();
         if (!includeInactive) {
-            builder.and(bookClubMemberEntity.isInactive.eq(false));
+            builder.and(bookClubEntity.isInactive.eq(false));
         }
         return jpaQueryFactory.select(getBookClubDtoProjection(userId))
                 .from(bookClubEntity)
@@ -163,7 +163,7 @@ public class BookClubQueryRepository {
                 .leftJoin(bookClubLikeEntity).on(bookClubEntity.id.eq(bookClubLikeEntity.bookClubId).and(bookClubLikeEntity.userId.eq(userId)))
                 .leftJoin(userEntity).on(bookClubEntity.createdBy.eq(userEntity.id))
                 .where(
-                        bookClubEntity.isInactive.eq(false),
+                        bookClubMemberEntity.isInactive.eq(false),
                         builder
                 )
                 .groupBy(bookClubEntity.id)
