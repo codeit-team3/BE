@@ -57,7 +57,10 @@ public class SecurityConfig {
                                 "/api/v1/book-clubs",
                                 "/api/v1/book-clubs/{bookClubId}",
                                 "/api/v1/book-clubs/{bookClubId}/reviews",
-                                "api/v1/auths/user/{userId}"
+                                "/api/v1/auths/user/{userId}",
+                                "/api/v1/book-clubs/user/{userId}/created",
+                                "/api/v1/book-clubs/user/{userId}/joined",
+                                "/api/v1/book-clubs/users/{userId}/reviews"
                         )
                         .permitAll()
                         .anyRequest()
