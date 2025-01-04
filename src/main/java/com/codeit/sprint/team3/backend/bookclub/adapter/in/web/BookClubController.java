@@ -4,7 +4,6 @@ import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCa
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
-import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubResponses;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.ExpandedBookClubResponse;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.ExpandedBookClubResponses;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseCase;
@@ -117,7 +116,7 @@ public class BookClubController {
     }
 
     @GetMapping("/my-created")
-    public ResponseEntity<BookClubResponses> findMyCreatedBookClubs(
+    public ResponseEntity<ExpandedBookClubResponses> findMyCreatedBookClubs(
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
             @RequestParam(defaultValue = "10") Integer size
@@ -130,7 +129,7 @@ public class BookClubController {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
-                .body(BookClubResponses.from(bookClubs));
+                .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
     @GetMapping("/my-joined")
@@ -151,7 +150,7 @@ public class BookClubController {
     }
 
     @GetMapping("/user/{userId}/created")
-    public ResponseEntity<BookClubResponses> findUserCreatedBookClubs(
+    public ResponseEntity<ExpandedBookClubResponses> findUserCreatedBookClubs(
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
@@ -165,11 +164,11 @@ public class BookClubController {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
-                .body(BookClubResponses.from(bookClubs));
+                .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
     @GetMapping("/user/{userId}/joined")
-    public ResponseEntity<BookClubResponses> findUserJoinedBookClubs(
+    public ResponseEntity<ExpandedBookClubResponses> findUserJoinedBookClubs(
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
@@ -183,6 +182,6 @@ public class BookClubController {
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
-                .body(BookClubResponses.from(bookClubs));
+                .body(ExpandedBookClubResponses.from(bookClubs));
     }
 }
