@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -31,7 +32,7 @@ public class BookClubReviewEntity {
         this.userId = userId;
         this.rating = rating;
         this.content = content;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     public static BookClubReviewEntity from(BookClubReview bookClubReview) {

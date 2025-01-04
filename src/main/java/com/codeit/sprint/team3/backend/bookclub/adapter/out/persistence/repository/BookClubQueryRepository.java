@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static com.codeit.sprint.team3.backend.auth.adapter.out.persistence.QUserEntity.userEntity;
@@ -45,7 +46,7 @@ public class BookClubQueryRepository {
             builder.and(bookClubEntity.targetDate.lt(nextDayStart));     // 다음 날 시작 시간보다 작은 조건);
         }
         if (orderType == OrderType.END) {
-            builder.and(bookClubEntity.endDate.goe(LocalDateTime.now()));
+            builder.and(bookClubEntity.endDate.goe(LocalDateTime.now(ZoneId.of("Asia/Seoul"))));
         }
         if (!StringUtils.isNullOrEmpty(searchKeyword)) {
             builder.and(bookClubEntity.title.contains(searchKeyword)
@@ -173,5 +174,3 @@ public class BookClubQueryRepository {
                 .fetch();
     }
 }
-
-

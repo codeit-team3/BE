@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Getter
@@ -90,8 +91,8 @@ public class BookClubEntity {
                 .detailAddress(bookClub.getDetailAddress())
                 .address(bookClub.getAddress())
                 .createdBy(userId)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+                .updatedAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .isInactive(false)
                 .hasImage(hasImage)
                 .build();
