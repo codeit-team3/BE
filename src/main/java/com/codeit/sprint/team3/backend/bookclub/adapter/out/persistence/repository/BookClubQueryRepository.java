@@ -179,7 +179,7 @@ public class BookClubQueryRepository {
                         JPAExpressions
                                 .selectOne()
                                 .from(bookClubMemberEntity)
-                                .where(bookClubMemberEntity.bookClubId.eq(bookClubEntity.id).and(bookClubMemberEntity.userId.eq(targetUserId)))
+                                .where(bookClubMemberEntity.bookClubId.eq(bookClubEntity.id).and(bookClubMemberEntity.userId.eq(targetUserId)).and(bookClubMemberEntity.isInactive.eq(false)))
                                 .exists(),
                         builder
                 )

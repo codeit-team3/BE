@@ -34,7 +34,6 @@ public class BookClubController {
     private final BookClubUseCase bookClubUseCase;
     private final UserProfileUseCase userProfileUseCase;
 
-    @SneakyThrows
     @PostMapping
     public ResponseEntity<Void> createBookClub(
             @RequestPart(required = false) MultipartFile image,
