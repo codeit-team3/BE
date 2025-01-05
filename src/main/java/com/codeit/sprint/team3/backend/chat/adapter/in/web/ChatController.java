@@ -48,7 +48,7 @@ public class ChatController {
 
         String destination = "/topic/group-chat/" + chatRoomId;
 
-        messagingTemplate.convertAndSend(destination, chatMessage);
+        messagingTemplate.convertAndSend(destination, ChatMessageSend.from(chatMessage, user.getImage()));
         saveChatMessageUseCase.save(chatMessage);
     }
 
