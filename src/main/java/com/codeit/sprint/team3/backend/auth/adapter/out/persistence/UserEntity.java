@@ -59,6 +59,10 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
+    public static UserDetails empty() {
+        return null;
+    }
+
     public User toDomain() {
         return new User(id, name, nickname, email, description, image, createdAt, updatedAt);
     }

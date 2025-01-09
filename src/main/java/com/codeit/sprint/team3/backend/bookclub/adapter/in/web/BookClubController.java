@@ -1,5 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
+import com.codeit.sprint.team3.backend.auth.annotation.CustomAuthenticationPrincipal;
 import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
@@ -13,7 +14,6 @@ import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +37,8 @@ public class BookClubController {
     @PostMapping
     public ResponseEntity<Void> createBookClub(
             @RequestPart(required = false) MultipartFile image,
-            @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
+            @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest,
+            @CustomAuthenticationPrincipal CustomUserPrincipal userPrincipal
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = 0L;
