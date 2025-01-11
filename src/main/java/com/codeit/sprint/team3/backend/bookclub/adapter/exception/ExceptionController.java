@@ -43,4 +43,16 @@ public class ExceptionController {
         return ResponseEntity.status(statusCode)
                 .body(body);
     }
+
+    @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code("500")
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(response);
+    }
 }

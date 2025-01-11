@@ -72,7 +72,7 @@ public class BookClubController {
             LocalDateTime targetDate,
             @CustomAuthenticationPrincipal(required = false) User user
     ) {
-        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
         List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, user.getId(), isAvailable);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
