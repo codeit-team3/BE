@@ -1,6 +1,5 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubLikeUseCase;
 import com.codeit.sprint.team3.backend.common.annotation.CustomAuthenticationPrincipal;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/book-clubs/{id}/likes")
 public class BookClubLikeController {
     private final BookClubLikeUseCase bookClubLikeUseCase;
-    private final UserProfileUseCase userProfileUseCase;
 
     @PostMapping
     public ResponseEntity<Void> likeBookClub(@PathVariable Long id, @CustomAuthenticationPrincipal User user) {

@@ -1,6 +1,5 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubReviewListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubReviewRequest;
@@ -24,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookClubReviewController {
     private final BookClubReviewUseCase bookClubReviewUseCase;
-    private final UserProfileUseCase userProfileUseCase;
 
     @PostMapping("/{bookClubId}/reviews")
     public ResponseEntity<Void> createBookClubReview(

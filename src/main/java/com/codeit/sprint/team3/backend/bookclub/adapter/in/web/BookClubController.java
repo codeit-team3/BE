@@ -1,7 +1,5 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.common.annotation.CustomAuthenticationPrincipal;
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
@@ -12,6 +10,7 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseC
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
+import com.codeit.sprint.team3.backend.common.annotation.CustomAuthenticationPrincipal;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ public class BookClubController {
     private static final List<String> VALID_EXTENSIONS = List.of("jpg", "jpeg");
 
     private final BookClubUseCase bookClubUseCase;
-    private final UserProfileUseCase userProfileUseCase;
 
     @PostMapping
     public ResponseEntity<Void> createBookClub(
