@@ -1,13 +1,11 @@
-package com.codeit.sprint.team3.backend.auth.annotation;
+package com.codeit.sprint.team3.backend.common.annotation;
 
-import com.codeit.sprint.team3.backend.auth.adapter.out.persistence.UserEntity;
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
 import com.codeit.sprint.team3.backend.auth.application.port.out.user.LoadUserPort;
 import com.codeit.sprint.team3.backend.auth.domain.model.User;
+import com.codeit.sprint.team3.backend.auth.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -15,7 +13,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.Objects;
 
-@Component
 @RequiredArgsConstructor
 public class CustomAuthenticationPrincipalResolver implements HandlerMethodArgumentResolver {
     private final LoadUserPort loadUserPort;
@@ -34,14 +31,19 @@ public class CustomAuthenticationPrincipalResolver implements HandlerMethodArgum
     ) {
         CustomAuthenticationPrincipal customAuthenticationPrincipal = Objects.requireNonNull(parameter.getParameterAnnotation(CustomAuthenticationPrincipal.class));
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        loadUserPort.loadUserDetailsByEmail(email)
-                .orElse(UserEntity.empty());
-        validateLoginRequired(customAuthenticationPrincipal.required());
-        return null;
+        User user;
+        try {
+            user = loadUserPort.loadUserByEmail(email);
+        } catch(UserNotFoundException e) {
+            user = User.getEmpty();
+        }
+        validateLoginRequired(customAuthenticationPrincipal.required(), user);
+        return user;
     }
 
-    private void validateLoginRequired(boolean required) {
-        if (required) {
+    private void validateLoginRequired(boolean required, User user) {
+        if (required && user.isEmpty()) {
+            throw new UserNotFoundException("유저 정보를 찾을수 없습니다.");
         }
     }
 }

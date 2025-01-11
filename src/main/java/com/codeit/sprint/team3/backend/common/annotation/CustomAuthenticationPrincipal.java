@@ -1,4 +1,4 @@
-package com.codeit.sprint.team3.backend.auth.annotation;
+package com.codeit.sprint.team3.backend.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
