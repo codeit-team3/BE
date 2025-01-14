@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
+import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.bookclub.adapter.exception.InvalidRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubRequest;
@@ -10,14 +10,13 @@ import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubUseC
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClub;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubType;
 import com.codeit.sprint.team3.backend.bookclub.domain.MeetingType;
+import com.codeit.sprint.team3.backend.common.annotation.CustomAuthenticationPrincipal;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,21 +31,15 @@ public class BookClubController {
     private static final List<String> VALID_EXTENSIONS = List.of("jpg", "jpeg");
 
     private final BookClubUseCase bookClubUseCase;
-    private final UserProfileUseCase userProfileUseCase;
 
     @PostMapping
     public ResponseEntity<Void> createBookClub(
             @RequestPart(required = false) MultipartFile image,
-            @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest
+            @RequestPart(name = "bookClub") @Valid CreateBookClubRequest createBookClubRequest,
+            @CustomAuthenticationPrincipal User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-
         validateImage(image);
-        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), userId, image);
+        bookClubUseCase.createBookClub(createBookClubRequest.toDomain(), user.getId(), image);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }
@@ -76,41 +69,25 @@ public class BookClubController {
             Integer memberLimitMin,
             Integer memberLimitMax,
             String location, //동 단위 town
-            LocalDateTime targetDate
+            LocalDateTime targetDate,
+            @CustomAuthenticationPrincipal(required = false) User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-        Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, userId, isAvailable);
+        Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+        List<BookClub> bookClubs = bookClubUseCase.findBookClubsBy(BookClubType.getQueryType(bookClubType), MeetingType.getQueryType(meetingType), memberLimitMin, memberLimitMax, location, targetDate, BookClubListOrderType.from(order), pageable, searchKeyword, user.getId(), isAvailable);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-
-        bookClubUseCase.deleteBookClub(id, userId);
+    public ResponseEntity<Void> deleteBookClub(@PathVariable Long id, @CustomAuthenticationPrincipal User user) {
+        bookClubUseCase.deleteBookClub(id, user.getId());
         return ResponseEntity.noContent()
                 .build();
     }
 
     @GetMapping("/{bookClubId}")
-    public ResponseEntity<ExpandedBookClubResponse> findBookClub(@PathVariable Long bookClubId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-
-        BookClub bookClub = bookClubUseCase.findBookClubById(bookClubId, userId);
+    public ResponseEntity<ExpandedBookClubResponse> findBookClub(@PathVariable Long bookClubId, @CustomAuthenticationPrincipal(required = false) User user) {
+        BookClub bookClub = bookClubUseCase.findBookClubById(bookClubId, user.getId());
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponse.from(bookClub));
     }
@@ -119,15 +96,11 @@ public class BookClubController {
     public ResponseEntity<ExpandedBookClubResponses> findMyCreatedBookClubs(
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @CustomAuthenticationPrincipal User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(user.getId(), user.getId(), BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
@@ -136,15 +109,11 @@ public class BookClubController {
     public ResponseEntity<ExpandedBookClubResponses> findMyJoinedBookClubs(
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @CustomAuthenticationPrincipal User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, userId, BookClubListOrderType.myBookClubOrderType(order), pageable, true);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(user.getId(), user.getId(), BookClubListOrderType.myBookClubOrderType(order), pageable, true);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
@@ -154,15 +123,11 @@ public class BookClubController {
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @CustomAuthenticationPrincipal(required = false) User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
+        List<BookClub> bookClubs = bookClubUseCase.findMyCreatedBookClubs(user.getId(), targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }
@@ -172,15 +137,11 @@ public class BookClubController {
             @PathVariable(name = "userId") Long targetUserId,
             @RequestParam(defaultValue = "DESC") String order,
             @RequestParam(defaultValue = "1") @Min(1) Integer page,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @CustomAuthenticationPrincipal(required = false) User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(userId, targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
+        List<BookClub> bookClubs = bookClubUseCase.findUserJoinedBookClubs(user.getId(), targetUserId, BookClubListOrderType.myBookClubOrderType(order), pageable, false);
         return ResponseEntity.ok()
                 .body(ExpandedBookClubResponses.from(bookClubs));
     }

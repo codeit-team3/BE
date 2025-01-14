@@ -1,6 +1,6 @@
 package com.codeit.sprint.team3.backend.bookclub.adapter.in.web;
 
-import com.codeit.sprint.team3.backend.auth.application.port.in.UserProfileUseCase;
+import com.codeit.sprint.team3.backend.auth.domain.model.User;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.BookClubReviewListOrderType;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.request.CreateBookClubReviewRequest;
 import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.BookClubReviewResponses;
@@ -8,12 +8,12 @@ import com.codeit.sprint.team3.backend.bookclub.adapter.in.web.response.ScoredBo
 import com.codeit.sprint.team3.backend.bookclub.application.port.in.BookClubReviewUseCase;
 import com.codeit.sprint.team3.backend.bookclub.domain.BookClubReview;
 import com.codeit.sprint.team3.backend.bookclub.domain.ScoredBookClubReview;
+import com.codeit.sprint.team3.backend.common.annotation.CustomAuthenticationPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,19 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookClubReviewController {
     private final BookClubReviewUseCase bookClubReviewUseCase;
-    private final UserProfileUseCase userProfileUseCase;
 
     @PostMapping("/{bookClubId}/reviews")
     public ResponseEntity<Void> createBookClubReview(
             @PathVariable Long bookClubId,
-            @Valid @RequestBody CreateBookClubReviewRequest createBookClubReviewRequest
+            @Valid @RequestBody CreateBookClubReviewRequest createBookClubReviewRequest,
+            @CustomAuthenticationPrincipal User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-        bookClubReviewUseCase.saveBookClubReview(bookClubId, userId, createBookClubReviewRequest.rating(), createBookClubReviewRequest.content());
+        bookClubReviewUseCase.saveBookClubReview(bookClubId, user.getId(), createBookClubReviewRequest.rating(), createBookClubReviewRequest.content());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }
@@ -53,13 +48,12 @@ public class BookClubReviewController {
     }
 
     @DeleteMapping("/{bookClubId}/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteBookClubReview(@PathVariable Long bookClubId, @PathVariable Long reviewId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
-        bookClubReviewUseCase.deleteBookClubReview(bookClubId, userId, reviewId);
+    public ResponseEntity<Void> deleteBookClubReview(
+            @PathVariable Long bookClubId,
+            @PathVariable Long reviewId,
+            @CustomAuthenticationPrincipal User user
+    ) {
+        bookClubReviewUseCase.deleteBookClubReview(bookClubId, user.getId(), reviewId);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,15 +61,11 @@ public class BookClubReviewController {
     public ResponseEntity<BookClubReviewResponses> getMyReviews(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "DESC") String order
+            @RequestParam(defaultValue = "DESC") String order,
+            @CustomAuthenticationPrincipal User user
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = 0L;
-        if (!"anonymousUser".equals(email)) {
-            userId = userProfileUseCase.getUserByEmail(email).getId();
-        }
         Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(userId, pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order), true);
+        List<BookClubReview> bookClubReviews = bookClubReviewUseCase.getUserReviews(user.getId(), pageable, BookClubReviewListOrderType.myBookClubReviewOrderType(order), true);
         return ResponseEntity.ok(BookClubReviewResponses.from(bookClubReviews));
     }
 
