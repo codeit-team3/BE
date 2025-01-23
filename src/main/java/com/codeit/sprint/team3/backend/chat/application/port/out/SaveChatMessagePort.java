@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface SaveChatMessagePort {
     void save(List<ChatMessage> list);
+    void save(ChatMessage chatMessage);
 }
