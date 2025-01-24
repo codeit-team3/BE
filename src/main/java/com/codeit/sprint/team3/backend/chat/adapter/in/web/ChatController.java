@@ -7,7 +7,6 @@ import com.codeit.sprint.team3.backend.chat.application.port.in.SaveChatMessageU
 import com.codeit.sprint.team3.backend.chat.domain.ChatMessage;
 import com.codeit.sprint.team3.backend.chat.domain.ChatType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
