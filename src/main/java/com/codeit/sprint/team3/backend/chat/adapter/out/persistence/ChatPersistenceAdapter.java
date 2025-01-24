@@ -26,6 +26,12 @@ public class ChatPersistenceAdapter implements SaveChatMessagePort, LoadChatPort
     }
 
     @Override
+    @Transactional
+    public void save(ChatMessage chatMessage) {
+        chatMessageRepository.save(ChatMessageEntity.from(chatMessage));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ChatMessage loadRecentChat(Long bookClubId) {
         return chatMessageRepository
